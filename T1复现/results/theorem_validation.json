@@ -1,0 +1,6 @@
+{
+  "single_cycle_cases": 1000,
+  "two_cycle_exhaustive_cases": 100,
+  "max_cost_excess": 3.552713678800501e-15,
+  "note": "finite numerical checks under nonnegative demand and no arrival crossover; not a new mathematical proof"
+}

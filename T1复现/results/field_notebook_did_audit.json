@@ -1,0 +1,86 @@
+{
+  "executed_cells": [
+    2,
+    3,
+    5,
+    7,
+    8,
+    10,
+    11,
+    13,
+    14,
+    15,
+    16,
+    17,
+    29,
+    30,
+    32,
+    33,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46
+  ],
+  "skipped": "imports cell 0; regressions cells 19-27 independently evaluated by NumPy OLS; others replayed unchanged except absolute input paths",
+  "did_tests": [
+    {
+      "metric": "holding",
+      "cell": 38,
+      "reexecuted_t": -8.476734092687739,
+      "reexecuted_p": 8.238807145058064e-17,
+      "saved_output": "t =  -8.628115507392884\np =  2.426748791349065e-17\n",
+      "post_gap_mean": -343.438,
+      "pre_gap_mean": 159.934,
+      "reexecuted_effect": -503.37199999999996
+    },
+    {
+      "metric": "stockout",
+      "cell": 40,
+      "reexecuted_t": -9.391906897402894,
+      "reexecuted_p": 3.874877819304967e-20,
+      "saved_output": "t =  -10.024732956234065\np =  1.3342089234992861e-22\n",
+      "post_gap_mean": -757.62,
+      "pre_gap_mean": 342.738,
+      "reexecuted_effect": -1100.358
+    },
+    {
+      "metric": "total",
+      "cell": 42,
+      "reexecuted_t": -14.150477986800093,
+      "reexecuted_p": 1.452524864442217e-41,
+      "saved_output": "t =  -15.63288508210019\np =  1.9298811915945072e-49\n",
+      "post_gap_mean": -1101.058,
+      "pre_gap_mean": 502.672,
+      "reexecuted_effect": -1603.73
+    },
+    {
+      "metric": "turnover",
+      "cell": 44,
+      "reexecuted_t": -2.837084381274654,
+      "reexecuted_p": 0.004644914698364636,
+      "saved_output": "t =  -2.9015848716410195\np =  0.0037943829761408732\n",
+      "post_gap_mean": -4.657451476387212,
+      "pre_gap_mean": 0.33524377993138693,
+      "reexecuted_effect": -4.9926952563186
+    },
+    {
+      "metric": "stockout_rate",
+      "cell": 46,
+      "reexecuted_t": -7.692592936165375,
+      "reexecuted_p": 3.450407517799295e-14,
+      "saved_output": "t =  -7.674689405907815\np =  3.9373204680470405e-14\n",
+      "post_gap_mean": -0.12825906038406037,
+      "pre_gap_mean": 0.03860805402431216,
+      "reexecuted_effect": -0.16686711440837254
+    }
+  ],
+  "note": "cell 29 uses unclipped control post turnover while other three turnover vectors are clipped; harmonized DID reported separately"
+}

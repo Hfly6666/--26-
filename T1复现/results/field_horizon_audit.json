@@ -1,0 +1,103 @@
+{
+  "e2e_pre": {
+    "n": 500,
+    "min_measured_days": 29,
+    "max_measured_days": 29,
+    "mean_measured_days": 29.0,
+    "zero_measured_days": 0,
+    "negative_average_inventory_records": 113,
+    "day_histogram": {
+      "29": 500
+    },
+    "total_cost_per_observed_day": 51.112482758620686,
+    "unweighted_mean_unit_day_cost": 51.11248275862068,
+    "nonempty_units": 500
+  },
+  "e2e_post": {
+    "n": 500,
+    "min_measured_days": 1,
+    "max_measured_days": 31,
+    "mean_measured_days": 20.096,
+    "zero_measured_days": 0,
+    "negative_average_inventory_records": 39,
+    "day_histogram": {
+      "1": 6,
+      "2": 1,
+      "4": 3,
+      "5": 37,
+      "6": 5,
+      "7": 36,
+      "8": 22,
+      "9": 3,
+      "10": 21,
+      "11": 16,
+      "12": 53,
+      "13": 22,
+      "14": 11,
+      "15": 18,
+      "31": 246
+    },
+    "total_cost_per_observed_day": 43.99333200636943,
+    "unweighted_mean_unit_day_cost": 40.38377080106274,
+    "nonempty_units": 500
+  },
+  "jd_pre": {
+    "n": 500,
+    "min_measured_days": 3,
+    "max_measured_days": 29,
+    "mean_measured_days": 20.58,
+    "zero_measured_days": 0,
+    "negative_average_inventory_records": 94,
+    "day_histogram": {
+      "3": 2,
+      "4": 1,
+      "5": 6,
+      "6": 23,
+      "7": 12,
+      "8": 4,
+      "9": 7,
+      "10": 22,
+      "11": 30,
+      "12": 4,
+      "13": 26,
+      "14": 26,
+      "15": 6,
+      "16": 7,
+      "17": 13,
+      "18": 16,
+      "19": 4,
+      "20": 18,
+      "21": 23,
+      "22": 2,
+      "23": 4,
+      "24": 15,
+      "25": 20,
+      "26": 1,
+      "27": 20,
+      "28": 11,
+      "29": 177
+    },
+    "total_cost_per_observed_day": 47.59912536443149,
+    "unweighted_mean_unit_day_cost": 44.645152864284675,
+    "nonempty_units": 500
+  },
+  "jd_post": {
+    "n": 500,
+    "min_measured_days": 0,
+    "max_measured_days": 31,
+    "mean_measured_days": 27.124,
+    "zero_measured_days": 2,
+    "negative_average_inventory_records": 129,
+    "day_histogram": {
+      "0": 2,
+      "1": 26,
+      "2": 16,
+      "3": 11,
+      "4": 12,
+      "31": 433
+    },
+    "total_cost_per_observed_day": 73.18787789411591,
+    "unweighted_mean_unit_day_cost": 71.76967007816211,
+    "nonempty_units": 498
+  }
+}

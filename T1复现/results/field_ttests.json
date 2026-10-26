@@ -1,0 +1,47 @@
+[
+  {
+    "metric": "holding",
+    "treatment_mean": 497.99,
+    "control_mean": 841.428,
+    "reduction_pct": 40.81608883944913,
+    "pooled_t": -7.574921935071391,
+    "pooled_p": 8.17663695645046e-14,
+    "welch_p": 1.1213725312582469e-13
+  },
+  {
+    "metric": "stockout",
+    "treatment_mean": 386.1,
+    "control_mean": 1143.72,
+    "reduction_pct": 66.24173748819642,
+    "pooled_t": -7.7656462889444,
+    "pooled_p": 2.0079594211986923e-14,
+    "welch_p": 2.5610991946942874e-14
+  },
+  {
+    "metric": "total",
+    "treatment_mean": 884.09,
+    "control_mean": 1985.148,
+    "reduction_pct": 55.46478146717524,
+    "pooled_t": -11.914765084142427,
+    "pooled_p": 1.0703809200100754e-30,
+    "welch_p": 2.3850461531599384e-30
+  },
+  {
+    "metric": "turnover",
+    "treatment_mean": 12.268704620140678,
+    "control_mean": 18.471056191690177,
+    "reduction_pct": 33.578759693989966,
+    "pooled_t": -5.477551569211563,
+    "pooled_p": 5.458741769919188e-08,
+    "welch_p": 6.467090585753729e-08
+  },
+  {
+    "metric": "stockout_rate",
+    "treatment_mean": 0.10827010628260629,
+    "control_mean": 0.23652916666666665,
+    "reduction_pct": 54.22547341267724,
+    "pooled_t": -8.427020034813369,
+    "pooled_p": 1.2259502974682827e-16,
+    "welch_p": 1.443120602006916e-16
+  }
+]

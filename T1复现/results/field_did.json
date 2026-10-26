@@ -1,0 +1,87 @@
+[
+  {
+    "metric": "holding",
+    "e2e_pre": 666.394,
+    "e2e_post": 497.99,
+    "control_pre": 506.46,
+    "control_post": 841.428,
+    "effect": -503.372,
+    "notebook_row_difference_t": -8.476734092687739,
+    "notebook_row_difference_p": 8.238807145058064e-17,
+    "cluster_se": 58.02027544228577,
+    "cluster_p": 1.6429682378690965e-17,
+    "cluster_ci": [
+      -617.2275920867821,
+      -389.5164079132216
+    ],
+    "panel_id_assumption": "supplied row IDs represent same unit within arm across periods; no original identity crosswalk published"
+  },
+  {
+    "metric": "stockout",
+    "e2e_pre": 815.868,
+    "e2e_post": 386.1,
+    "control_pre": 473.13,
+    "control_post": 1143.72,
+    "effect": -1100.358,
+    "notebook_row_difference_t": -9.391906897402894,
+    "notebook_row_difference_p": 3.874877819304967e-20,
+    "cluster_se": 114.05959987166335,
+    "cluster_p": 4.06734045163431e-21,
+    "cluster_ci": [
+      -1324.1818818684621,
+      -876.5341181315491
+    ],
+    "panel_id_assumption": "supplied row IDs represent same unit within arm across periods; no original identity crosswalk published"
+  },
+  {
+    "metric": "total",
+    "e2e_pre": 1482.262,
+    "e2e_post": 884.09,
+    "control_pre": 979.59,
+    "control_post": 1985.148,
+    "effect": -1603.73,
+    "notebook_row_difference_t": -14.150477986800093,
+    "notebook_row_difference_p": 1.452524864442217e-41,
+    "cluster_se": 106.83559260404016,
+    "cluster_p": 4.408419930684724e-46,
+    "cluster_ci": [
+      -1813.377912891679,
+      -1394.0820871083388
+    ],
+    "panel_id_assumption": "supplied row IDs represent same unit within arm across periods; no original identity crosswalk published"
+  },
+  {
+    "metric": "turnover",
+    "e2e_pre": 15.48785681562142,
+    "e2e_post": 12.268704620140678,
+    "control_pre": 15.152613035690036,
+    "control_post": 18.471056191690177,
+    "effect": -6.537595351480886,
+    "notebook_row_difference_t": -3.799230560759077,
+    "notebook_row_difference_p": 0.00015392321686716982,
+    "cluster_se": 1.700193002936666,
+    "cluster_p": 0.00012807266465754744,
+    "cluster_ci": [
+      -9.873954573072476,
+      -3.2012361298892684
+    ],
+    "panel_id_assumption": "supplied row IDs represent same unit within arm across periods; no original identity crosswalk published"
+  },
+  {
+    "metric": "stockout_rate",
+    "e2e_pre": 0.23613333333333333,
+    "e2e_post": 0.10827010628260629,
+    "control_pre": 0.19752527930902117,
+    "control_post": 0.23652916666666665,
+    "effect": -0.16686711440837254,
+    "notebook_row_difference_t": -7.692592936165375,
+    "notebook_row_difference_p": 3.450407517799295e-14,
+    "cluster_se": 0.02147794209171469,
+    "cluster_p": 1.953379612437079e-14,
+    "cluster_ci": [
+      -0.20901417067476935,
+      -0.12472005814197933
+    ],
+    "panel_id_assumption": "supplied row IDs represent same unit within arm across periods; no original identity crosswalk published"
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "checks": [
+    "initial render",
+    "next-page pagination",
+    "SKU filtering",
+    "empty filter",
+    "baseline change",
+    "CSV export 2607 rows"
+  ],
+  "note": "Node minimal-DOM interaction test; native browser rendering not performed"
+}

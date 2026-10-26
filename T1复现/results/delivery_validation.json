@@ -1,0 +1,140 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "name": "OLS slope and standard error match scipy.linregress",
+      "passed": true
+    },
+    {
+      "name": "e2e_pre: cost identity and 500 unique IDs",
+      "passed": true
+    },
+    {
+      "name": "e2e_post: cost identity and 500 unique IDs",
+      "passed": true
+    },
+    {
+      "name": "jd_pre: cost identity and 500 unique IDs",
+      "passed": true
+    },
+    {
+      "name": "jd_post: cost identity and 500 unique IDs",
+      "passed": true
+    },
+    {
+      "name": "2607 distinct evaluated SKUs",
+      "passed": true
+    },
+    {
+      "name": "independent offline evaluator matches every method",
+      "passed": true
+    },
+    {
+      "name": "theorem enumeration 1100 instances",
+      "passed": true
+    },
+    {
+      "name": "matching solver gradient",
+      "passed": true
+    },
+    {
+      "name": "SHA256 upstream/control_demand_vlt.csv",
+      "passed": true
+    },
+    {
+      "name": "SHA256 upstream/df_test.csv",
+      "passed": true
+    },
+    {
+      "name": "SHA256 upstream/order_e2e_post_500.csv",
+      "passed": true
+    },
+    {
+      "name": "SHA256 upstream/order_e2e_pre_500.csv",
+      "passed": true
+    },
+    {
+      "name": "SHA256 upstream/order_jd_post_500.csv",
+      "passed": true
+    },
+    {
+      "name": "SHA256 upstream/order_jd_pre_500.csv",
+      "passed": true
+    },
+    {
+      "name": "SHA256 upstream/README.docx",
+      "passed": true
+    },
+    {
+      "name": "SHA256 upstream/.ipynb_checkpoints/E2E_Section4-checkpoint.ipynb",
+      "passed": true
+    },
+    {
+      "name": "SHA256 upstream/.ipynb_checkpoints/Field_experiments_summary 2-checkpoint.ipynb",
+      "passed": true
+    },
+    {
+      "name": "SHA256 upstream/.ipynb_checkpoints/Propensity_score_matching 2-checkpoint.ipynb",
+      "passed": true
+    },
+    {
+      "name": "SHA256 upstream/E2E-model-data/Data/rdc_sales_1320.csv",
+      "passed": true
+    },
+    {
+      "name": "SHA256 upstream/E2E-model-data/Data/stock.csv",
+      "passed": true
+    },
+    {
+      "name": "SHA256 upstream/E2E-model-data/Data/vlt_2019_0305.csv",
+      "passed": true
+    },
+    {
+      "name": "SHA256 T1-A practical End to End invontory management model with deep learning.pdf",
+      "passed": true
+    },
+    {
+      "name": "SHA256 replication_package_MS-FTBDA-20-01585.zip",
+      "passed": true
+    },
+    {
+      "name": "unique HTML IDs",
+      "passed": true
+    },
+    {
+      "name": "all navigation anchors exist",
+      "passed": true
+    },
+    {
+      "name": "six embedded PNGs with alt text",
+      "passed": true
+    },
+    {
+      "name": "no external runtime resources",
+      "passed": true
+    },
+    {
+      "name": "HTML dataset equals computed CSV",
+      "passed": true
+    },
+    {
+      "name": "expected methodological boundaries included",
+      "passed": true
+    },
+    {
+      "name": "no unresolved template tokens",
+      "passed": true
+    },
+    {
+      "name": "valid UTF8 content without replacement chars",
+      "passed": true
+    },
+    {
+      "name": "tables numbered in document order",
+      "passed": true
+    }
+  ],
+  "check_count": 33,
+  "html_bytes": 691629,
+  "note": "HTML static/content and numerical checks; Node controls in javascript_validation.json; actual browser screenshots and viewport controls in browser_validation.json"
+}

@@ -1,0 +1,102 @@
+{
+  "cells": [
+    {
+      "cell": 0,
+      "status": "skipped imports/LaTeX display only"
+    },
+    {
+      "cell": 1,
+      "status": "executed",
+      "source_sha256": "4d965befbeb7b7950192890ef0a1029c05601c920d2f6d5c140e6e5f3634b081"
+    },
+    {
+      "cell": 2,
+      "status": "executed",
+      "source_sha256": "f5d204f31b2c9d8c2158422526ac2a84011e021d3680097ce9deaf29e1707d63"
+    },
+    {
+      "cell": 4,
+      "status": "executed",
+      "source_sha256": "c9e2f680f704905156a4638be7e12f817bd4b26b6d79875a38f56820561b534e"
+    },
+    {
+      "cell": 6,
+      "status": "executed",
+      "source_sha256": "82d2601427ca93f8e5dab388c268b57bc0457e2d6c52019c9e47b11adad05aec"
+    },
+    {
+      "cell": 8,
+      "status": "executed",
+      "source_sha256": "7c6bc93b9652fdd70ababb9885ce9bb10db2a7c5d6d96bb116f16d32ce99b321"
+    },
+    {
+      "cell": 9,
+      "status": "executed",
+      "source_sha256": "c7ac881b40396e0bfe05b200ea1adff5b09296dc44f4526f7ed9fb93b5cc3d68"
+    },
+    {
+      "cell": 11,
+      "status": "executed",
+      "source_sha256": "5bc7f8f26fca78a9a19312c3d5e360ecc66142708ab656617cf2fa963f94aa3b"
+    },
+    {
+      "cell": 12,
+      "status": "executed",
+      "source_sha256": "181e70d782d560b3344f6e911bbd04a835bd93ab616b13d43899e0751789d21d"
+    },
+    {
+      "cell": 14,
+      "status": "executed",
+      "source_sha256": "6ee636bc305b459aec24f10b40cad31b5aa4cbcf4485a2675592b0e4e6e43e63"
+    },
+    {
+      "cell": 15,
+      "status": "executed",
+      "source_sha256": "0cf8371a5ea06c5bb21447dffb42bc686b8418178be25382f81fe459f38dcf29"
+    },
+    {
+      "cell": 16,
+      "status": "skipped imports/LaTeX display only"
+    }
+  ],
+  "golden_max_abs_error": 4.775606612383854e-07,
+  "input_rows": 3000,
+  "grouped_skus": 2607,
+  "summary": {
+    "OPT": {
+      "Total cost": 2572.964326812428,
+      "Holding cost": 1363.2186421173762,
+      "Stockout cost": 1209.7456846950518
+    },
+    "E2E_RNN": {
+      "Total cost": 3036.7583429229,
+      "Holding cost": 1883.5914844649021,
+      "Stockout cost": 1153.1668584579977
+    },
+    "Bm1": {
+      "Total cost": 3842.3053317990025,
+      "Holding cost": 1709.3640199462984,
+      "Stockout cost": 2132.941311852704
+    },
+    "Bm2": {
+      "Total cost": 3837.8285385500576,
+      "Holding cost": 1541.6306098964326,
+      "Stockout cost": 2296.197928653625
+    },
+    "Normal": {
+      "Total cost": 3961.6915995397007,
+      "Holding cost": 2317.0978135788264,
+      "Stockout cost": 1644.5937859608746
+    },
+    "Gamma": {
+      "Total cost": 4099.94975067127,
+      "Holding cost": 1947.8381281166091,
+      "Stockout cost": 2152.1116225546607
+    },
+    "gbm": {
+      "Total cost": 3424.8699654775605,
+      "Holding cost": 1424.9298043728425,
+      "Stockout cost": 1999.940161104718
+    }
+  }
+}

@@ -1,0 +1,77 @@
+[
+  {
+    "path": "upstream/control_demand_vlt.csv",
+    "bytes": 1400821,
+    "sha256": "4ef7baeb07d7a7ec14ddf1c4e16e00c87e0b7e22db0c3de59b93423c4b97a923"
+  },
+  {
+    "path": "upstream/df_test.csv",
+    "bytes": 2455165,
+    "sha256": "491996c425d250a2ab2b864b18c2c617c97e8249ffba403d6aed1c5e5a20208e"
+  },
+  {
+    "path": "upstream/order_e2e_post_500.csv",
+    "bytes": 140281,
+    "sha256": "f7afe2a31a262f2ca29671c54ffc428dfeff716e35d23f236c987bddc7fdf925"
+  },
+  {
+    "path": "upstream/order_e2e_pre_500.csv",
+    "bytes": 189240,
+    "sha256": "f5c6a3f3c3dbc25394f8d19d22d1d8c94cabb705d0e47efafabc8f3bac3ce5a8"
+  },
+  {
+    "path": "upstream/order_jd_post_500.csv",
+    "bytes": 178528,
+    "sha256": "40021c666a3e8c3cf8a8a1e36868bdc2de8b8626a04c5961b4976afc0d703e07"
+  },
+  {
+    "path": "upstream/order_jd_pre_500.csv",
+    "bytes": 141601,
+    "sha256": "d9cb5c9f7b73ab68630d0b25135df8a2ca650122e4d83f15a0e1bbdad131b209"
+  },
+  {
+    "path": "upstream/README.docx",
+    "bytes": 18094,
+    "sha256": "89bd0d66a2f2941c0970d523b8ae9f2a4e9199dd5b28036447713c7f2f4dc047"
+  },
+  {
+    "path": "upstream/.ipynb_checkpoints/E2E_Section4-checkpoint.ipynb",
+    "bytes": 12674,
+    "sha256": "dcdb4d0366b512df9ef8cd8578825cf34367c2a0075fcfe27c08e560d0f9fc87"
+  },
+  {
+    "path": "upstream/.ipynb_checkpoints/Field_experiments_summary 2-checkpoint.ipynb",
+    "bytes": 34749,
+    "sha256": "fefc36407f0b06903c3d943529dd89eca5792af2bd9b8e235356bb10c13bacf1"
+  },
+  {
+    "path": "upstream/.ipynb_checkpoints/Propensity_score_matching 2-checkpoint.ipynb",
+    "bytes": 45126,
+    "sha256": "eaae4739f12ea602cf1753ab35ddf59cbcb893c60530eebef94e97f0680f02e4"
+  },
+  {
+    "path": "upstream/E2E-model-data/Data/rdc_sales_1320.csv",
+    "bytes": 8324,
+    "sha256": "7b4e79c2705386c3057c1edee7d652b95160a8e802e7352df7f4e794d4599b93"
+  },
+  {
+    "path": "upstream/E2E-model-data/Data/stock.csv",
+    "bytes": 434,
+    "sha256": "a736e471c3f0845d2acf52dfa5362919d65844edd6e8473024718584043995fb"
+  },
+  {
+    "path": "upstream/E2E-model-data/Data/vlt_2019_0305.csv",
+    "bytes": 400,
+    "sha256": "089aba08155720b64c47a44d2a68f139f2142f920628532e9f5742081b2883a8"
+  },
+  {
+    "path": "T1-A practical End to End invontory management model with deep learning.pdf",
+    "bytes": 1371207,
+    "sha256": "531c0dc74bb4ed8af52ddd9f7996d2312699316ab6fbbc114fe7b2d20d47b3a4"
+  },
+  {
+    "path": "replication_package_MS-FTBDA-20-01585.zip",
+    "bytes": 1523446,
+    "sha256": "a24e8531c846c3c17f35d422c2218c219d84693d9225301ad83ccfc7e7ee65de"
+  }
+]

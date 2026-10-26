@@ -1,0 +1,13 @@
+{
+  "golden_max_abs_error": 4.2722625437363604e-10,
+  "cell_counts": {
+    "e2e_pre": 500,
+    "e2e_post": 500,
+    "jd_pre": 500,
+    "jd_post": 500
+  },
+  "pre_post_id_coverage": {
+    "e2e": 500,
+    "jd": 500
+  }
+}

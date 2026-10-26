@@ -1,0 +1,40 @@
+{
+  "passed": true,
+  "browser": "chrome.exe",
+  "checks": [
+    {
+      "view": "desktop_top",
+      "passed": true,
+      "viewport": 1440,
+      "documentWidth": 1425,
+      "rows": 30
+    },
+    {
+      "view": "desktop_field",
+      "passed": true,
+      "viewport": 1440,
+      "documentWidth": 1425,
+      "rows": 30
+    },
+    {
+      "view": "mobile_top",
+      "passed": true,
+      "viewport": 430,
+      "documentWidth": 415,
+      "rows": 30
+    },
+    {
+      "view": "mobile_explorer",
+      "passed": true,
+      "viewport": 430,
+      "documentWidth": 415,
+      "rows": 30
+    }
+  ],
+  "controls": {
+    "empty": true,
+    "restored": true,
+    "page": "第 2 / 87 页，每页 30 行"
+  },
+  "note": "Actual Chrome headless: precise viewport, no page overflow, 30-row script render, section scrolling and controls; screenshots inspected separately"
+}

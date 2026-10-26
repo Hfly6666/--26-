@@ -1,0 +1,122 @@
+[
+  {
+    "branch": "notebook",
+    "metric": "holding",
+    "treatment_post": 497.99,
+    "control_post": 841.428,
+    "reduction_pct": 40.81608883944913,
+    "did": -503.372
+  },
+  {
+    "branch": "notebook",
+    "metric": "stockout",
+    "treatment_post": 386.1,
+    "control_post": 1143.72,
+    "reduction_pct": 66.24173748819642,
+    "did": -1100.3580000000002
+  },
+  {
+    "branch": "notebook",
+    "metric": "total",
+    "treatment_post": 884.09,
+    "control_post": 1985.148,
+    "reduction_pct": 55.46478146717524,
+    "did": -1603.7299999999998
+  },
+  {
+    "branch": "notebook",
+    "metric": "turnover",
+    "treatment_post": 12.268704620140678,
+    "control_post": 18.471056191690177,
+    "reduction_pct": 33.578759693989966,
+    "did": -6.537595351480883
+  },
+  {
+    "branch": "notebook",
+    "metric": "stockout_rate",
+    "treatment_post": 0.10827010628260629,
+    "control_post": 0.23652916666666665,
+    "reduction_pct": 54.22547341267724,
+    "did": -0.16686711440837254
+  },
+  {
+    "branch": "paper_h12_b88",
+    "metric": "holding",
+    "treatment_post": 5975.88,
+    "control_post": 10097.136,
+    "reduction_pct": 40.81608883944913,
+    "did": -6040.464
+  },
+  {
+    "branch": "paper_h12_b88",
+    "metric": "stockout",
+    "treatment_post": 3775.2,
+    "control_post": 11183.04,
+    "reduction_pct": 66.24173748819642,
+    "did": -10759.056
+  },
+  {
+    "branch": "paper_h12_b88",
+    "metric": "total",
+    "treatment_post": 9751.08,
+    "control_post": 21280.176,
+    "reduction_pct": 54.17763462106704,
+    "did": -16799.519999999997
+  },
+  {
+    "branch": "paper_h12_b88",
+    "metric": "turnover",
+    "treatment_post": 12.268704620140678,
+    "control_post": 18.471056191690177,
+    "reduction_pct": 33.578759693989966,
+    "did": -6.537595351480883
+  },
+  {
+    "branch": "paper_h12_b88",
+    "metric": "stockout_rate",
+    "treatment_post": 0.10827010628260629,
+    "control_post": 0.23652916666666665,
+    "reduction_pct": 54.22547341267724,
+    "did": -0.16686711440837254
+  },
+  {
+    "branch": "include_last_day",
+    "metric": "holding",
+    "treatment_post": 520.58,
+    "control_post": 863.342,
+    "reduction_pct": 39.70176361163942,
+    "did": -485.8299999999999
+  },
+  {
+    "branch": "include_last_day",
+    "metric": "stockout",
+    "treatment_post": 434.052,
+    "control_post": 1281.978,
+    "reduction_pct": 66.142008677216,
+    "did": -1227.906
+  },
+  {
+    "branch": "include_last_day",
+    "metric": "total",
+    "treatment_post": 954.632,
+    "control_post": 2145.32,
+    "reduction_pct": 55.50165010348107,
+    "did": -1713.7360000000003
+  },
+  {
+    "branch": "include_last_day",
+    "metric": "turnover",
+    "treatment_post": 12.268704620140678,
+    "control_post": 18.471056191690177,
+    "reduction_pct": 33.578759693989966,
+    "did": -6.537595351480883
+  },
+  {
+    "branch": "include_last_day",
+    "metric": "stockout_rate",
+    "treatment_post": 0.12194393106893107,
+    "control_post": 0.2680333333333333,
+    "reduction_pct": 54.504191865838415,
+    "did": -0.1849742042940985
+  }
+]

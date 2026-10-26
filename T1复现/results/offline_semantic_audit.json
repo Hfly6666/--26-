@@ -1,0 +1,58 @@
+[
+  {
+    "method": "OPT",
+    "negative_orders": 854,
+    "order_decisions": 3000,
+    "fallback_count": 11,
+    "skipped_pre_arrival_loop_days": 2068,
+    "max_independent_cost_difference": 0.0
+  },
+  {
+    "method": "E2E_RNN",
+    "negative_orders": 525,
+    "order_decisions": 3000,
+    "fallback_count": 11,
+    "skipped_pre_arrival_loop_days": 2068,
+    "max_independent_cost_difference": 0.0
+  },
+  {
+    "method": "Bm1",
+    "negative_orders": 663,
+    "order_decisions": 3000,
+    "fallback_count": 11,
+    "skipped_pre_arrival_loop_days": 2068,
+    "max_independent_cost_difference": 0.0
+  },
+  {
+    "method": "Bm2",
+    "negative_orders": 703,
+    "order_decisions": 3000,
+    "fallback_count": 11,
+    "skipped_pre_arrival_loop_days": 2068,
+    "max_independent_cost_difference": 0.0
+  },
+  {
+    "method": "Normal",
+    "negative_orders": 477,
+    "order_decisions": 3000,
+    "fallback_count": 11,
+    "skipped_pre_arrival_loop_days": 2068,
+    "max_independent_cost_difference": 0.0
+  },
+  {
+    "method": "Gamma",
+    "negative_orders": 613,
+    "order_decisions": 3000,
+    "fallback_count": 11,
+    "skipped_pre_arrival_loop_days": 2068,
+    "max_independent_cost_difference": 0.0
+  },
+  {
+    "method": "gbm",
+    "negative_orders": 582,
+    "order_decisions": 3000,
+    "fallback_count": 11,
+    "skipped_pre_arrival_loop_days": 2068,
+    "max_independent_cost_difference": 0.0
+  }
+]

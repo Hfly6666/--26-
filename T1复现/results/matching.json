@@ -1,0 +1,77 @@
+{
+  "n_treated": 500,
+  "n_candidates": 55333,
+  "logistic_beta": [
+    -3.8611260667609946,
+    -0.0023781275437730403,
+    -0.08733144478060846
+  ],
+  "gradient_inf_norm": 1.0628571633919393e-09,
+  "solver_success": true,
+  "solver_message": "Optimization terminated successfully.",
+  "matched_unique_candidates": 424,
+  "zero_distance_matches": 316,
+  "ties": 460,
+  "max_distance": 0.2172043010000002,
+  "released_control_covariate_max_row_difference": 29.0,
+  "released_control_sorted_covariate_max_difference": 0.0,
+  "balance": [
+    {
+      "sample": "candidate_pool",
+      "feature": "demand",
+      "treatment_mean": 2.217962237202,
+      "control_mean": 2.148803004866915,
+      "standardized_mean_difference": 0.010790401381368874
+    },
+    {
+      "sample": "candidate_pool",
+      "feature": "vlt",
+      "treatment_mean": 8.484,
+      "control_mean": 11.120073012488026,
+      "standardized_mean_difference": -0.41861266947432124
+    },
+    {
+      "sample": "raw_covariate_nn",
+      "feature": "demand",
+      "treatment_mean": 2.217962237202,
+      "control_mean": 2.2184537634379997,
+      "standardized_mean_difference": -7.668918807853507e-05
+    },
+    {
+      "sample": "raw_covariate_nn",
+      "feature": "vlt",
+      "treatment_mean": 8.484,
+      "control_mean": 8.484,
+      "standardized_mean_difference": 0.0
+    },
+    {
+      "sample": "released_control",
+      "feature": "demand",
+      "treatment_mean": 2.217962237202,
+      "control_mean": 2.218453763438,
+      "standardized_mean_difference": -7.668918807860435e-05
+    },
+    {
+      "sample": "released_control",
+      "feature": "vlt",
+      "treatment_mean": 8.484,
+      "control_mean": 8.484,
+      "standardized_mean_difference": 0.0
+    },
+    {
+      "sample": "score_nn",
+      "feature": "demand",
+      "treatment_mean": 2.217962237202,
+      "control_mean": 2.291873118284,
+      "standardized_mean_difference": -0.011531765845249507
+    },
+    {
+      "sample": "score_nn",
+      "feature": "vlt",
+      "treatment_mean": 8.484,
+      "control_mean": 8.482,
+      "standardized_mean_difference": 0.0003176032435303136
+    }
+  ],
+  "limitations": "matching candidate covariates cannot be linked to released 500 control outcome IDs; no private identity mapping is inferred"
+}

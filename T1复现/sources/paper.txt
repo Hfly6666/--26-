@@ -1,0 +1,1510 @@
+=== PAGE 1 ===
+A Practical End-to-End Inventory Management Model with
+Deep Learning
+Meng Qi,a Yuanyuan Shi,b Yongzhi Qi,c Chenxin Ma,d Rong Yuan,d Di Wu,d Zuo-Jun (Max) Shen e,f,*
+a SC Johnson College of Business, Cornell University, Ithaca, New York 14853;b Department of Electrical and Computer Engineering,
+University of California–San Diego, San Diego, California 92161; c JD.com Smart Supply Chain Y, Mountain View, California 94043;
+d JD.com Silicon Valley Research Center, Mountain View, California 94043;e College of Engineering, University of California–Berkeley,
+Berkeley, California 9472; f Faculty of Engineering & Faculty of Business and Economics, University of Hong Kong, Pokfulam, Hong Kong
+*Corresponding author
+Contact: mq56@cornell.edu, https://orcid.org/0000-0002-0984-4846(MQ); yyshi@eng.ucsd.edu(YS); qiyongzhi1@jd.com (YQ);
+chenxin.ma@jd.com (CM); rongyuan.exe@gmail.com(RY); di.wu@jd.com (DW); shen@ieor.berkeley.edu,
+https://orcid.org/0000-0003-4538-8312(Z-J(M)S)
+Received: June 2, 2020
+Revised: November 6, 2020
+Accepted: November 23, 2020
+Published Online in Articles in Advance:
+December 13, 2022
+https://doi.org/10.1287/mnsc.2022.4564
+Copyright: © 2022 INFORMS
+Abstract. We investigate a data-driven multiperiod inventory replenishment problem
+with uncertain demand and vendor lead time (VLT) with accessibility to a large quantity of
+historical data. Different from the traditional two-step predict-then-optimize (PTO) solution
+framework, we propose a one-step end-to-end (E2E) framework that uses deep learning
+models to output the suggested replenishment amount directly from input features without
+any intermediate step. The E2E model is trained to capture the behavior of the optimal
+dynamic programming solution under historical observations without any prior assump-
+tions on the distributions of the demand and the VLT. By conducting a series of thorough
+numerical experiments using real data from one of the leading e-commerce companies, we
+demonstrate the advantages of the proposed E2E model over conventional PTO frame-
+works. We also conduct a ﬁeld experiment with JD.com, and the results show that our new
+algorithm reduces holding cost, stockout cost, total inventory cost, and turnover rate sub-
+stantially compared with JD’s current practice. For the supply chain management industry,
+our E2E model shortens the decision process and provides an automatic inventory manage-
+ment solution with the possibility to generalize and scale. The concept of E2E, which uses
+the input information directly for the ultimate goal, can also be useful in practice for other
+supply chain management circumstances.
+History: Accepted by Hamid Nazerzadeh, big data analytics.
+Funding: This research was supported by the National Key Research and Development Program of
+China [Grant 2018YFB1700600] and National Natural Science Foundation of China [Grants 71991462
+and 91746210].
+Supplemental Material:T h eo n l i n ed a t aa r ea v a i l a b l ea thttps://doi.org/10.1287/mnsc.2022.4564.
+Keywords: end-to-end decision-making • inventory management • deep learning • e-commerce
+1. Introduction
+Inventory management has been an active research topic
+in management science for more than a century. For
+comprehensive coverage on this topic, please refer to
+t e x t b o o k ss u c ha sZ i p k i n(2000) and Snyder and Shen
+(2011). However, in today’s digital and ﬁercely competi-
+tive world, e-commerce companies are facing new chal-
+lenges in inventory management owing to the increasing
+level of customer diversity, the increasing variety of
+products, and the higher level of service required. For
+example, on large e-commerce platforms (such as Ama-
+zon and JD.com), hundreds of millions of products are
+simultaneously sold with various demand patterns that
+require different replenishment strategies. Hence, it is
+critical to develop a framework that is able to identify
+the optimal/close-to-optimal strategy automatically for
+different demand because they can’t manage these many
+products efﬁc i e n t l yb yc u r r e n tp r a c t i c e s .
+Motivated by the previously mentioned requisite, we
+provide a framework that automatically outputs the
+replenishment decisions for a large number of SKUs.
+More speciﬁcally, we consider the multiperiod inventory
+management problem over a ﬁnite horizon, whereas
+both demand and vendor lead time (VLT) are considered
+to be stochastic. The study of this kind of problem starts
+from Kaplan ( 1970)a n dE h r h a r d t(1984), in which the
+merit of (s, S) and myopic base stock policies are demon-
+strated. However, implementing such policies requires an
+estimation/prediction of certain parameters/random vari-
+ables and then incorporating the estimation/prediction
+into those policies (see Toktay and Wein 2001,Z h ua n d
+Thonemann 2004,W a n ge ta l . 2012 as representatives).
+759
+MANAGEMENT SCIENCE
+Vol. 69, No. 2, February 2023, pp. 759 –773
+ISSN 0025-1909 (print), ISSN 1526-5501 (online)https://pubsonline.informs.org/journal/mnsc
+
+=== PAGE 2 ===
+This type of solution paradigm in whichﬁrst predicting
+random variables of interest and then incorporating the
+forecast results into an optimization stage is the so-called
+predict-then-optimize (PTO) solution framework (Elmach-
+toub and Grigas2022). Although widely adopted, it decou-
+ples the prediction and optimization stages. Consequently,
+the optimization step does not use the input data in an opti-
+mized manner, and useful information can be substantially
+lost in the PTO process.
+Instead of implementing a conventional two-step
+framework, we propose a data-driven, end-to-end (E2E)
+framework for this problem. The term “end-to-end”
+means training a model to output the inventory re-
+plenishment decision directly from input data without
+any intermediate steps. The integration of prediction
+and optimization is investigated in several existing
+works about inventory management (Ban and Rudin
+2018, Oroojlooyjadid et al. 2020). Both Ban and Rudin
+(2018) and Oroojlooyjadid et al. ( 2020)f o c u so nt h e
+feature-based newsvendor problem, which is essentially
+a quantile regression problem of demand, and a direct
+recipe is provided by statistical learning theory (Koenker
+et al. 2005). However, the multiperiod replenishment
+problem is substantially different from the newsvendor
+problem in two aspects:ﬁrst, it adopts a multiperiod set-
+ting in which current decisions affect the future instead
+of the single-period setting in the newsvendor problem;
+second, there are two types of uncertainties (stochastic
+demand and stochastic VLT), whereas the newsvendor
+problem only considers one source of uncertainty (sto-
+chastic demand). Therefore, the multiperiod inventory
+problem is an essentially more complicated problem,
+and there is no simple closed-form solution for the opti-
+mal replenishment decision.
+The lack of proper labels creates a fundamental chal-
+lenge for developing an end-to-end supervised learning
+framework in the multiperiod setting. To overcome it,
+we propose a labeling method by solving a dynamic
+programming problem and labeling each sample of the
+order with the optimal decision under its realization
+(Theorem 1). As for the choice of model structure, we
+design a modular deep-learning framework in which
+we have an individual prediction block (a recurrent
+neural network) for demand and an individual predic-
+tion block (a multiple layer perceptron) for VLT, respec-
+tively. Then, these two blocks join together with other
+features, such as review period and initial inventory,
+to produce the ﬁnal replenishment decision output.
+Compared with a fully connected neural network over
+all features, our design reduces the computational com-
+plexity in magnitudes yet providing convenience on
+explanation and good performance as well. Such a
+modular designed framework, together with the label-
+ing process, could form a general recipe for developing
+end-to-end learning models for other large-scale supply
+chain management problems. We conduct a series of
+thorough numerical experiments that consist of both
+off-line comparisons and a ﬁeld experiment. In off-line
+numerical experiments, we compare the performance of
+the proposed E2E model with existing PTO benchmarks
+using real-world data sets from JD.com. The results
+demonstrate that the E2E model can reduce the total
+inventory management costs compared with multiple
+PTO methods.
+The E2E algorithm has been implemented at JD.com
+for some SKUs in the “tea set” and “pastry essentials &
+seasoning” categories starting from February 2020. As
+JD.com is gradually expanding the number of SKUs
+with the E2E algorithm implemented, we conduct a sys-
+tematic ﬁeld experiment for 30 days from March 30,
+2020, to April 30, 2020. The experiment involved 61,430
+orders placed in 12 distribution centers for 9,308 SKUs.
+We compare the performance of the E2E algorithm with
+that of the retailer ’s current replenishment algorithm.
+The results show that the E2E algorithm dominates the
+current algorithm across all performance measures.
+More speciﬁcally, the average holding, stockout, and
+total inventory costs for the treatment group are all
+reduced by more than 25% compared with those for the
+control group, whereas two other metrics, the turnover
+rate and stockout ratio, are reduced by 8.8% and 34.6%,
+respectively. Hypothesis tests conducted con ﬁrm that
+all observed reductions are statistically signi ﬁcant. To
+further verify the effect of the E2E algorithm, we adopt
+a difference-in-differences (DiD) approach. The
+ﬁeld
+experiment results demonstrate the immediate applic-
+ability of the E2E method at JD.com.
+Our work distinguishes itself from the existing liter-
+ature in the following three aspects:
+1. To our best knowledge, we are theﬁrst to propose an
+end-to-end framework for the multiperiod replenishment
+problem. Based on a labeling method that we propose,
+our framework outputs replenishment decisions directly
+from input features. We believe this could be a general
+recipe for end-to-end models, whereas the optimization
+stage is complicated.
+2. The proposed end-to-end learning framework
+automatically decides the replenishment strategy for
+various demand patterns. Our approach outperforms
+multiple baseline models, including the current prac-
+tice of a leading online retailer in both off-line simu-
+lations with real-life data and the ﬁeld experiment.
+The ﬁeld experiment veri ﬁes the applicability of our
+algorithm for real-world inventory management in the
+e-commerce industry.
+3. We also innovate the design of deep neural net-
+work structure by designing two modules for demand
+and VLT uncertainty separately. Our design reduces
+the computational complexity and the number of
+weights in magnitudes yet still achieving good per-
+formance. We also perform a comprehensive sensitiv-
+ity analysis in AppendixB.
+Qi et al.: A Practical End-to-End Inventory Management Model with Deep Learning
+760 Management Science, 2023, vol. 69, no. 2, pp. 759 –773, © 2022 INFORMS
+
+=== PAGE 3 ===
+The remainder of the paper is organized as follows: In
+Section2, we review the related literature. In Section3,w e
+state the detail of problem setting and the E2E model. In
+Section 4, we test our E2E model by conducting off-line
+numerical experiments with real-world data. In Section5,
+we demonstrate the design and results of theﬁeld experi-
+ment. Finally, we conclude in Section6 and propose some
+potential future research directions. Moreover, Appendix
+A gives the detailed proof of Theorem1. Sensitivity analy-
+sis of neural network architectures, data sets, and model
+covariates are provided in AppendixB.
+2. Literature Review
+In this section, we ﬁrst brieﬂyr e v i e we x i s t i n gm e t h o d s
+for the multiperiod replenishment problem and classic
+two-step PTO algorithms. After that, we discuss some
+existing literature on data-driven approaches as well
+as the emerging idea of integrating prediction and
+optimization for inventory management problems,
+which is mainly based on the newsvendor setting.
+Finally, we introduce the development and applica-
+tions of end-to-end approaches in other ﬁelds, which
+serves as the incubator for the proposed E2E inventory
+management framework.
+The multiperiod inventory management problem
+has been studied in the decades since Kaplan ( 1970).
+Using dynamic programming, Kaplan ( 1970) and Ehr-
+hardt ( 1984) establish the optimality conditions for
+base stock and ( s, S) policies under ﬁnite and in ﬁnite
+horizons, respectively. Although the optimality of
+base stock policies is proven under different settings
+(Gallego and ¨Ozer 2001, Iida and Zipkin 2006,M u h a r -
+remoglu and Tsitsiklis 2008), calculating the optimal
+parameter of such a policy remains computationally
+intractable under general cases (Levi et al. 2007). In
+order to get computationally tractable algorithms, one
+option is to use approximation algorithms. For example,
+Levi et al. (2007) provide two-approximation algorithms
+using dual-balancing techniques. The other option is to
+use heuristic algorithms, such as myopic policies (see
+Veinott 1965,I g n a l la n dV e i n o t t1969,I i d aa n dZ i p k i n
+2006 as representative works).
+However, all these aforementioned policies assume
+certain knowledge of demand and VLT (e.g., demand
+and VLT follow certain distributional models, and the
+parameters of the model are known). In practice, such
+information is often unveiled to decision makers. There-
+fore, a two-step PTO framework is widely adopted in
+industry for inventory management. The PTO frame-
+work ﬁrst forecasts demand, and VLT then incorporates
+the prediction into certain decision rules, such as base
+stock and (s, S) policies stated earlier.
+In the stage of prediction, there are two different
+types of forecasting methods for demand and VLT.
+The output of forecasting can be a point estimator or a
+distribution of the random variable. Theﬁrst type of fore-
+casting is widely adopted in industry because, in some
+cases, accurate prediction can be achieved by machine
+learning models (e.g., Friedman et al. 2001). However,
+point estimation of random variables can lead to informa-
+tion loss, which affects the subsequent optimization stage.
+In contrast, if we can make a perfect forecast of the ran-
+dom variable distribution, we have all the information in
+order to solve the following stochastic optimization prob-
+lem. Recently, there are works that develop distribu-
+tional/probabilistic forecasting models. When the random
+variable does not depend on external features, the distri-
+bution can beﬁtted by simply using empirical distribution
+of historical observations or by kernel density estimation
+(Sheather and Jones 1991). When the random variable
+depends on covariates, distributional/probabilistic fore-
+casting becomes more difﬁcult. A recent work by Bertsi-
+m a sa n dK a l l u s(2020
+) uses a nonparametric method to
+approximate the distribution of the random variable con-
+ditioned on covariates by weighted empirical distribution.
+However, this benchmark is not applicable to numerical
+experiments using a real-world data set that includes time
+series features because of the computational dif ﬁculty.
+B¨ose et al. (2017)f o r e c a s tm u l t i p l eq u a n t i l e so fd e m a n dt o
+gain more distributional information. Their approach is
+similar to the benchmark BM1 in our off-line numerical
+experiments. Ambrogioni et al. (2017) propose another
+nonparametric method for conditional density estima-
+tion using a kernel mixture network. In their work,
+densities are assumed to be linear combinations of a
+family of kernel functions, and the weights are deter-
+mined by a deep neural network. Therefore, it requires
+a lot of computational effort and is, thus, not applica-
+ble in our setting. Moreover, we want to highlight the
+fact that, because of the multiperiod setting in our
+problem, even though we have a practical method for
+estimating the conditional distribution, solving the cor-
+responding stochastic dynamic programming is also
+computationally difﬁcult (we refer to Levi et al. 2007
+for a more detailed review).
+Because the traditional two-step approaches that
+separate prediction from optimization often lead to sub-
+optimality, there is a trend to perform these two steps
+simultaneously in the recent literature on data-driven
+inventory management (Liyanage and Shanthikumar
+2005,C h ue ta l .2008, Ban and Rudin 2018, Bertsimas and
+Kallus 2020,O r o o j l o o y j a d i de ta l .2020). Such integration
+attempts can be realized through operational statistics.
+Liyanage and Shanthikumar (2005) demonstrate the exis-
+tence of improved operational statistics (in contrast to the
+use of the maximum likelihood estimator) by integrating
+the prediction and optimization steps on several demand
+distributions; Chu et al. (2008) further study how to obtain
+the optimal operational statistics in a Bayesian framework.
+Qi et al.: A Practical End-to-End Inventory Management Model with Deep Learning
+Management Science, 2023, vol. 69, no. 2, pp. 759 –773, © 2022 INFORMS 761
+
+=== PAGE 4 ===
+Both Liyanage and Shanthikumar (2005)a n dC h ue ta l .
+(2008) only study the newsvendor problem.
+Ban and Rudin (2018) and Oroojlooyjadid et al. (2020)
+investigate the concept of integration in the feature-
+based newsvendor situation, in which one has access to
+past demand observations as well as to a large number
+of related features. Ban and Rudin ( 2018) study this
+problem with the newsvendor loss function and assume
+a linear relationship between the features and the news-
+vendor quantile (i.e., the solution). They analytically
+show that their approach can perform better than the
+sample average approximation and the separated esti-
+mation and optimization method. Oroojlooyjadid et al.
+(2020) adopt a multiple-layer perceptron model that
+optimizes the order quantity. However, all the afore-
+mentioned works are focused on the newsvendor prob-
+lem, in which neither the connection between the
+periods nor the vendor lead time is considered; both are
+important factors in practice.
+Beyond inventory problems, Bertsimas and Kallus
+(2020)a n dE l m a c h t o u ba n dG r i g a s(2022) study the
+“integration” philosophy for general optimization prob-
+lems. Bertsimas and Kallus ( 2020)c o m b i n em a c h i n e
+learning and optimization techniques for decision-
+making purposes when features (referred to as auxiliary
+quantities in the paper) are available. Their idea is to
+construct weight functions from data through machine
+learning methods and incorporate these weights to the
+objective in the optimization procedure. Under the con-
+text of linear programming, Elmachtoub and Grigas
+(2022)p r o p o s ea“smart PTO” framework that directly
+leverages the optimization problem structure forming
+the loss function.
+Another branch of research that served as an impe-
+tus for our work originated from the machine learning
+community. In recent years, there has been a dra-
+matic increase in the number of systems built on “E2E
+learning” (Donti et al. 2017). This term refers to a learn-
+ing framework, the ultimate goal of which is directly
+predicted from raw inputs rather than intermediate
+steps. This concept is successfully applied to a wide
+range of tasks, such as ﬁnance (Bengio 1997), image re-
+cognition (Wang et al. 2011), and robotics manipula-
+tion (Levine et al. 2016). These lines of works provide
+certain valuable inputs to us in terms of integrating
+prediction and optimization; however, such an E2E
+approach has not yet been studied with a focus on the
+general supply chain management problem.
+3. Model
+In this section, we ﬁrst describe the multiperiod
+replenishment problem. In Section 3.1, this problem is
+presented with a dynamic programming framework.
+In Section 3.2, we explain our E2E model with empha-
+sis on its two key components: the property of the
+optimal dynamic programming solution and the deep
+learning network structure.
+3.1. The Multiperiod Replenishment Problem
+In this work, we consider the multiperiod inventory
+management problem with stochastic demand and VLT.
+T h ed e t a i l sa r ea sf o l l o w s :f o ras i n g l ei t e ma tas i n g l e
+location, we consider aﬁnite horizon of discrete periods
+1, ::: , T,w h e r eT is the end of the horizon. Over the T
+periods, there is a sequence of random demands,
+denoted by D
+t, ∀t /equals 1, ::: T.L e t It denote the inventory
+level at the beginning of period t. The inventory level
+c a nb ep o s i t i v ei fw eh a v ei n v e n t o r ye x c e s so nh a n do r
+negative if we have an inventory shortage and, hence,
+backorders. As a result, at the end of each period, we
+either incur a holding cost of h f o re a c he x c e s su n i to ra
+stockout cost ofb for each backordered unit.
+We consider periodic review policies and assume
+that review periods are given as a sequence of dates.
+That is, we assume there are in total M orders from
+period 1 to T that are placed at t
+m, ∀m /equals 1, ::: , M.T h i s
+assumption is aligned with the real-world practice, in
+which a ﬁxed schedule is typically held for order
+placement (e.g., one can place orders on Tuesdays and
+Fridays). In this problem, we consider the stochastic
+VLT. That is, the mth order placed at period t arrives
+at period t + L, where L is a random variable that only
+takes positive integer values. Hence, the arrival time of
+orders, denoted by v
+m /equals tm + Lm, ∀m /equals 1, ::: , M,a r e
+also random variables. Moreover, we assume there are
+no crossing over of order arrivals. Although some of
+the aforementioned assumptions may be unrepre-
+sentative (such as backorder and no crossing over), in
+Section 4.2, we relax some of them and test our pro-
+posed method under a more realistic setting.
+Hereafter, D
+t and Lm denote the random variables;
+dt and lm denote the realization of demand at period t
+and the realization of VLT of the mth order, respec-
+tively. At each period, the system ﬁrst updates the
+inventory level by checking if any order has arrived;
+then, demand occurs. Let a
+m denote the order quantity
+for the mth order. At the end of the period, either a
+holding or backorder cost occurs. The inventory level
+updates follow the equation
+I
+t+1 /equals It − Dt +
+∑M
+m/equals 1
+am 1{t /equals tm + Lm}: (1)
+Let the cost that occurred at period t be denoted by St,
+and we have
+St /equals hI t − Dt +
+∑M
+m/equals 1
+am 1{t /equals tm + Lm}
+[] +
++ b − It + Dt −
+∑M
+m/equals 1
+am 1{t /equals tm + Lm}
+[] +
+: (2)
+Here, [·]+ denotes max{·,0 }.
+Qi et al.: A Practical End-to-End Inventory Management Model with Deep Learning
+762 Management Science, 2023, vol. 69, no. 2, pp. 759 –773, © 2022 INFORMS
+
+=== PAGE 5 ===
+Our aim is to minimize the expected cost during the
+ﬁnite horizon by choosing the order quantities at
+given periods, that is,
+min
+a1, ::: , aM
+E
+∑T
+t/equals 1
+St
+[]
+: (3)
+St is de ﬁned by ( 2), and the updates of It follow ( 1).
+Note that the expectation is taken over the joint distri-
+bution of the demand {Dt}T
+t/equals 1 and the VLT {Lm}M
+m/equals 1.
+3.2. E2E Model
+The goal of the replenishment problem is to determine
+the best order quantity, a : f (x)∈ R, at each given
+review point after having observed all the features, x.
+Such features can include historical demand, VLT,
+item speci ﬁcations, and temporal information (day,
+month, season).
+To ﬁnd the mapping function f (·),w e ﬁrst train the
+model with historical data. For each historical replen-
+ishment time point with observed feature vector x
+i,
+we need to compute a∗
+i , which is the corresponding
+optimal order quantity. This step is referred to as
+“labeling” for supervised learning algorithms (section
+2.1.4 in James et al. 2013). We describe the details of
+the labeling method in Section 3.2.1. When the associ-
+ated label for each observation is completed, we can
+establish the mapping with the following training
+objective:
+min
+f :X → R
+∑N
+i/equals 1
+L( f (xi); a∗
+i ), (4)
+where N is the total number of training data and L is
+the loss function that is deﬁned based on the difference
+between the model prediction f (xi) and the optimal
+order quantity a∗
+i . In particular, we consider neural net-
+work models for function f, and we describe the details
+of the neural network structure in Section 3.2.2.
+3.2.1. Labeling the Optimal Order Quantity. Unlike the
+newsvendor problem, for which the optimal solution
+is the
+b
+b+h quantile of demand distribution, the optimal
+solution of the multiperiod inventory problem is
+not straightforward to calculate. In this section, we
+analyze the properties of the optimal order solution,
+hence producing labels a
+∗
+i , i /equals 1, ::: , N for the train-
+ing set.
+Given the order place and arrival time and the
+demand at every time step, we can compute the opti-
+mal quantity for each order using the dynamic pro-
+gramming framework. It should be noted that within
+periods 1, ::: , T, there are M orders placed. Moreover,
+t
+m ∈{ 1, ::: , T}, m /equals 1, ::: , M denotes the time period in
+which the mth order is placed (the quantity can be
+zero). In a similar manner, let vm denote the time
+when the mth order arrives. It should be stressed that
+we assume no crossover of lead time. With given demand,
+we can formulate the recursion as
+Vm(Ivm )/equals min
+am ≥ 0
+∑vm+1 − 1
+s/equals vm
+h[Ivm + am − d[vm,s]]+
++ b[d[vm,s] − Ivm − am]+
++ Vm+1(Ivm + am − d[vm,vm+1 − 1]),( 5 )
+where Vm(Ivm ) is the optimal cost over interval
+[vm, vm+1 − 1], d[i,j] :/equals ∑j
+t/equals i dt.
+The following theorem describes the closed-form
+solution of (5); hence, it provides an ef ﬁcient approach
+to label the training and testing data set.
+Theorem 1. The optimal multiperiod inventory reple-
+nishment problem described by (5) is decomposable, that is,
+a∗∗
+m :/equals arg minam ≥ 0{∑vm+1 − 1
+s/equals vm h[Ivm + am − d[vm ,s]]+ + b[d[vm ,s]− Ivm −
+am]+ + Vm+1(Ivm + am − d[vm ,vm+1 − 1])} /equals arg minam ≥ 0
+∑vm+1 − 1
+s/equals vm h[Ivm
++ am − d[vm ,s]]+ + b[d[vm ,s] − Ivm − am]+. In addition, the closed
+form of the optimal solution is a ∗∗
+m /equals max{d[vm ,s∗] − Ivm ,0 }, where
+s∗ /equals⌊ b(vm+1 − vm )
+h+b ⌋+ vm.
+Remark 1. Theorem 1 indicates that labeling using ex
+post optimal order quantities is practical, that is, com-
+putationally efﬁcient for a large data set. If, instead of
+deterministic dynamic programs, stochastic dynamic
+programs are solved to get labels, the labeling process
+becomes computationally intractable.
+3.2.2. Neural Network Structure. When the associated
+labels for training data are obtained, we train a neural
+network model f by solving the optimization problem
+in ( 4). The general structure of the neural network
+model is shown in Figure 1.
+The inputs of the E2E model include ﬁve parts:
+Input_DF and Input_VLT represent features related
+to demand and VLT, respectively; Input_basic is
+the set of general item-level features, such as product
+categories, warehouse locations, and brand names.
+The remaining two features, review period and initial
+stock level, are directly fed into one of the hidden
+layers because they are not intended to generate any
+cross terms with other features. The E2E model has
+three outputs, and the main output Out1 ∈ R repre-
+sents the ﬁnal replenishment decision. In addition,
+there are two accessory outputs: Out2 as the demand
+forecast and Out3 as the VLT forecast.
+All hidden layers, except forDF_submodule, are fully
+connected layers with rectiﬁed linear unit (ReLU) activa-
+tion function and dropout layers (Srivastava et al.2014)
+to prevent overﬁtting. The DF_submoduleis designed
+as a multiquantile RNN (MQRNN), which receives mul-
+tiple time series (e.g., demand time series, promotion
+time series) as inputs and produces a daily demand pre-
+diction over a set of quantiles as outputs. We use
+MQRNN because of its demonstrated performance in
+Qi et al.: A Practical End-to-End Inventory Management Model with Deep Learning
+Management Science, 2023, vol. 69, no. 2, pp. 759 –773, © 2022 INFORMS 763
+
+=== PAGE 6 ===
+demand forecasting in the e-commerce industry (Wen
+et al. 2017,F a ne ta l .2019). Figure 2(a) provides an illus-
+trative example of the demand forecast using MQRNN.
+The training objective function is deﬁned as
+min
+θ
+∑N
+i/equals 1
+{L(Out1i; a∗
+i )+ λ1 ˆL1(Out2i, a∗
+DF,i)
++λ2 ˆL2(Out3i, a∗
+VLT,i)}, (6)
+where θ is the set of neural network parameters to be
+optimized; N is the total number of training data; and
+λ1, λ2 are two small positive constants penalizing the
+demand and VLT prediction error. A few reasons lead
+us to include three terms in ( 6) rather than only the
+ﬁrst term. First, the optimization of the two forecast-
+ing outputs (i.e., Out2 as the demand forecast and
+Out3 as the VLT forecast) act as a guide for faster
+model training. Without them, it becomes more dif ﬁ-
+cult for each submodule of the network to be trained
+as desired. Moreover, Out2 and Out3 can be used for
+monitoring the model performance. When running
+the E2E model in real time, the observation of any
+anomalies in these two outputs can help decision
+makers detect any abnormal output on replenishment
+amounts and analyze the reason behind it.
+This network structure is designed with the knowl-
+edge that the replenishment decision is made using
+the information of the demand and the VLT, whose
+feature sets hardly overlap and are barely related.
+Thus, compared with a fully connected network over
+all features, our design reduces the computational
+complexity and the number of weights in magnitudes,
+yet still providing convenience on explanation and
+good performance as well.
+4. Numerical Experiment
+In this section, we test the performance of the E2E
+model using real-world data. In Section 4.1, we intro-
+duce several common, two-step PTO benchmarks. In
+Section 4.2, we evaluate the performance of the E2E
+model with different PTO benchmarks and highlight
+the bene ﬁts of both the one-step decision framework
+and the deep learning architecture. In all experiments,
+we use real data from JD.com, one of the largest
+online retailers in China. It owns hundreds of ware-
+houses to manage inventory and has replenishment
+agreements with tens of thousands of vendors. All neu-
+ral networks are implemented in PyTorch (Paszke et al.
+2017) and trained on a server with an NVIDIA Tesla
+P40 GPU. We refer to Appendix B for more details of
+the model parameters and a sensitivity analysis.
+4.1. Comparison with Two-Step Replenishment
+Methods
+In order to show the performance of our E2E model,
+we compare the E2E model with several currently in
+use two-step PTO methods.
+We start with two widely adopted base stock poli-
+cies. In “normal” base stock, the daily demand is
+assumed to be independent and identically distrib-
+uted (i.i.d.) and follows the normal distribution. Thus,
+the base-stock level is computed as
+BM
+normal /equals µD(R + µVLT)
++ φ− 1 b
+b + h
+() /radicaltpext/radicaltpext/radicaltpext/radicaltpext/radicaltpext/radicaltpext/radicaltpext/radicaltpext/radicaltpext/radicaltpext/radicaltpext/radicaltpext/radicaltpext/radicaltpext/radicaltpext/radicaltpext/radicaltpext/radicaltpext/radicaltpext/radicaltpext/radicaltpext/radicaltpext/radicaltpext/radicaltpext/radicaltpext/radicaltpext/radicaltpext/radicaltpext/radicaltpext/radicaltpext /radicaltpext
+(R + µVLT)σ2
+D + µ2
+Dσ2
+VLT
+√
+, (7)
+where R is the review period. The mean ( µD, µVLT)
+and the standard deviation ( σD, σVLT) are estimated
+Figure 1. Neural Network Structure of the E2E Model
+Qi et al.: A Practical End-to-End Inventory Management Model with Deep Learning
+764 Management Science, 2023, vol. 69, no. 2, pp. 759 –773, © 2022 INFORMS
+
+=== PAGE 7 ===
+using historical data that contains the demand and the
+VLT of the past 180 days. Similarly, in “gamma,” daily
+demand is assumed to be i.i.d. and follows the gamma
+distribution. Hence, the sum of (R + µ
+VLT) days of
+demand, denoted by ¯D, follows Gamma((R + µVLT)
+k, θ), where θ and k are estimated using the demand
+data of the past 180 days. The base stock level is com-
+puted as
+BMgamma /equals Qgamma
+¯D
+b
+b + h
+()
+, (8)
+where Q ¯D denotes the quantile function of ¯D.
+In addition to the two base stock policies, we also
+want to compare the E2E model with PTO bench-
+marks. As mentioned earlier in Section 2, there are
+two different types of forecasting in the PTO method:
+one type of PTO method estimates a point prediction
+of the random variable, whereas the other type pre-
+dicts the distribution of the random variable. If a PTO
+method succeeds in achieving perfect prediction of
+the joint conditional distribution of demand and VLT,
+then theoretically, ( 3) can be solved to optimality.
+However, as we review in Section 2, there barely
+exists an applicable method for our problem setting.
+Moreover, even with reliable forecasting of the joint
+distribution, we still need to solve a corresponding
+stochastic dynamic programming problem, which is
+computationally intractable.
+Therefore, we construct the following two PTO
+benchmarks using a MQRNN for demand forecasting
+and a mixed linear program for VLT prediction for a
+fair comparison.
+1. BM1: First, we let ˆd
+m /equals ∑vm+1 − 1
+t/equals tm dt denote the total
+demand within two adjacent order arrival times, namely,
+t
+m and vm+1. Note that vm can be calculated based on
+VLT prediction. Then, the b=(b + h) quantile of ˆdm
+is predicted, equivalent to solving the following
+problem:
+min
+am≥ 0
+E ˆdm
+[b( ˆdm − am − Itm )+ + h(am + Itm − ˆdm)+],( 9 )
+and BM1 then can be considered a PTO method with
+point prediction of VLT and distributional forecasting
+of demand. In the optimization stage, the multiperiod
+problem is approximated by a single-period newsven-
+dor problem.
+2. BM2: An alternative PTO method is toﬁrst sequen-
+tially forecast the future demand within two adjacent
+order arrival times, that is,d
+tm , dtm+1, ::: , dvm+1 − 1,a n dt h e n
+calculate the optimal decision,am, by minimizing the fol-
+lowing accumulated inventory cost:
+min
+am ≥ 0
+∑vm+1 − 1
+t/equals vm
+h[Itm + am − d[tm,t]]+ + b[d[tm,t] − Itm − am]+: (10)
+Here, vm is estimated as ˆvm /equals tm + ˆlm and vm+1 is esti-
+mated as ˆvm+1 /equals tm+1 + ˆlm as well. Notice that ˆlm comes
+from Out3 as the VLT forecast, and dt is the demand
+forecast. BM2 can be viewed as a PTO method with
+point prediction for both VLT and demand, but in the
+optimization stage, the multiperiod problem setting is
+kept.
+The minimizers of (9) and (10) are denoted by a
+∗
+Bm1,m
+(BM1) and a∗
+Bm2,m (BM2), respectively. Two bench-
+marks are employed because each of them empha-
+sizes different stages as a two-step model. First,
+because predicting the total demand within a time
+interval is more likely to reach the desired accuracy
+than predicting a sequence of demands for each day,
+the ﬁrst benchmark can yield better results in the pre-
+diction stage. However, by noticing that the objective
+in ( 9) contains a newsvendor loss rather than the one
+in our multiperiod setting, one can expect that the sec-
+ond benchmark yields results of higher accuracy in
+the optimization stage.
+4.2. Results
+We test the performance of the E2E method and the
+four PTO policies using real-world data, a 24,333-SKU
+data set under the food and snack category. The input
+vector for each replenishment sample contains SKU
+proﬁle features, daily sales, and historical VLT, which
+is a 132-dimensional vector. The entire data set is
+split into training and testing data according to the
+creation date of each sample. We use the ﬁrst 30-day
+replenishment-order data as the training and valida-
+tion set, in which 80% of the data are used for training
+and the remaining 20% are used for validation. The
+validation set is used to evaluate the performance of
+the neural network model for different combinations
+of hyperparameter values, which helps us to choose
+the optimal hyperparameters and prevent over ﬁtting.
+The remaining 30 days of data for all SKUs serve as
+the testing set. The performance of the E2E model and
+benchmarks are evaluated by total inventory manage-
+ment, holding, and stockout costs, de ﬁned via ( 2). By
+default, the values of b and h were set to nine and one,
+respectively.
+The total inventory management, holding, and
+stockout costs of different models over the test period
+are listed in Figure2(b). The average holding and stockout
+costs were computed as in (2). “OPT” refers to the opti-
+mal replenishment decisions obtained by solving the
+replenishment problem with known demand and VLT,
+which is the same approach that is used for the labeling
+of the data as described in Section3.2.1.F o rt h et w oP T O
+methods “BM1” and “BM2,” we use the same neural
+network architecture as the E2E model, that is, an
+MQRNN
+1 for demand prediction and a two-layer feed-
+forward neural network for the VLT prediction. In this
+experiment, the MQRNN model outputsQ /equals 6 quantile
+prediction, including mean and quantile levels at 10%,
+60%, 70%, 80%, 90%, and 95%. The results for BM1 and
+Qi et al.: A Practical End-to-End Inventory Management Model with Deep Learning
+Management Science, 2023, vol. 69, no. 2, pp. 759 –773, © 2022 INFORMS 765
+
+=== PAGE 8 ===
+BM2 are reported based on the best quantile with the
+lowest total cost.
+Figure 2(right) shows that the proposed E2E deep
+learning model is the best compared with all bench-
+marks. The advantages of the end-to-end deep learn-
+ing model are twofold. On one hand, the bene ﬁto f
+using an end-to-end framework rather than a two-step
+PTO framework can be observed by comparing the
+cost of E2E_RNN against BM1 and BM2 because all
+three algorithms use the same deep learning structure
+for demand and VLT prediction, whereas E2E_RNN
+adopts a one-step decision framework and BM1, BM2
+use a two-step framework. We suspect that the predic-
+tion errors of demand and lead time compound in the
+optimization stage. To avoid the accumulation of error,
+the end-to-end framework shortens the decision proc-
+ess yet targets the ultimate optimization goal. On the
+other hand, the beneﬁt of the deep learning model ver-
+sus other statistical learning models can be observed
+when comparing the E2E_RNN cost and E2E_GBM cost.
+E2E_GBM denotes the performance of the end-to-end
+LightGBM (Ke et al. 2017) model, which is a decision
+tree–based algorithm that is widely used in industry.
+Because the tree-based models are not able to process
+time-series features (e.g., historical demand series), we
+use a statistical summary of demand as features, includ-
+ing the mean, standard deviation, and temporal differen-
+ces. Both E2E_RNN cost and E2E_GBM algorithms use
+the end-to-end decision framework, whereas the deep
+learning model has better representation capacity, and
+RNN is more powerful in modeling time series data.
+5. Field Experiment
+The proposed E2E framework has been implemented
+in JD.com since February 2020. As of October 2020,
+there are more than 7,000 SKUs that adopt the E2E
+framework for inventory management, showing sig-
+niﬁcant inventory cost savings in production. JD.com
+is currently working on expanding the E2E frame-
+work to more categories.
+In this section, we demonstrate the design and
+results of a 30-day ﬁeld experiment conducted in
+JD.com’s logistics system from March 30, 2020, to
+April 30, 2020.
+5.1. Overview of JD.com ’s Autoreplenishment
+System
+JD.com maintains a logistics network in China that con-
+sists of about 500 distribution centers (DCs) nationwide.
+Each DC manages its inventory using JD ’si n v e n t o r y
+replenishment system. JD’s current inventory replenish-
+ment algorithm can be viewed as a two-step PTO
+decision-making process empowered by machine learn-
+ing techniques and industry expertise. In the ﬁrst step,
+the demand and VLT are predicted using state-of-the-
+art machine learning methods considering seasonality,
+geographic effect, SKU, and vendor heterogeneity. Fan
+et al. (2019)d e s c r i b ea ne f f o r tt ot h er e t a i l e r’sa d v a n c e d
+demand forecast using deep learning techniques. In the
+second step, the inventory replenishment decision is
+made based on the predictions from the ﬁrst step. The
+service level used in current practice at JD.com is
+decided by a hyperparameter called the “critical ratio,”
+which is equivalent to the ratio of the hyperparameters
+b and h in the E2E model. Generally speaking, the crit-
+ical ratio for a different product category doesn ’th a v e
+to be the same.
+In JD’s replenishment system, the performance of a
+replenishment algorithm is quanti ﬁed by ﬁve key
+metrics: stockout rate, turnover rate, and the three
+metrics we use in Section 4.2, including the total
+inventory management, holding, and stockout costs.
+Figure 2. Demand Forecasting and Performances of E2E Model with MQRNN
+Notes. Left: demand forecast for three example SKUs via MQRNN. Blue line is the ground truth, 10% and 90% quantile forecasts are the lower
+and upper boundary of the forecast band, and 50% (median) is the orange line within the band. The shaded area is the forecast within the current
+order place time and next order arrival time. Right: average inventory cost under different E2E and PTO polices over 30 days per SKU.
+Qi et al.: A Practical End-to-End Inventory Management Model with Deep Learning
+766 Management Science, 2023, vol. 69, no. 2, pp. 759 –773, © 2022 INFORMS
+
+=== PAGE 9 ===
+The stockout rate is de ﬁned as the percentage of days
+that stockout occurs during the experimental period;
+that is, it measures the frequency of stockouts. The
+inventory turnover rate is calculated by dividing the
+average inventory level of each day by the average
+demand.
+5.2. Experiment Design
+To test whether the proposed E2E algorithm leads to
+better replenishment decisions, we conducted a ﬁeld
+experiment during a 30-day period from March 30,
+2020, to April 30, 2020. The experiment involves
+61,430 orders placed in 12 DCs for 9,308 SKUs. The
+SKUs are from 18 third level categories, which belong
+to two second level categories, tea set and pastry
+essentials & seasoning. The details of the categories
+involved in the ﬁeld experiment are listed in Table 1.
+An E2E model is trained for the second level cate-
+gory tea set and for each third level category in the
+second level category pastry essentials & seasoning.
+In this experiment, we use h /equals 12 and b /equals 88, which is
+consistent with the critical ratio in these categories.
+The ﬁeld experiment contains all replenishment
+orders placed after March 30, 2020, for each (SKU,
+DC) pair in the aforementioned categories and 12
+DCs. A treatment group involves 1,052 SKUs, and
+6,097 (SKU, DC) pairs in total are selected. The replen-
+ishment decisions of these (SKU, DC) pairs are made
+according to the proposed E2E algorithm starting
+from March 30, 2020. For the remaining (SKU, DC)
+pairs, replenishment decisions are made following
+JD’s current algorithm. The treatment group of (SKU,
+DC) pairs was chosen by JD.com ’s managers based on
+business criteria. We select a control group that also
+includes 6,097 (SKU, DC) pairs using propensity score
+matching in order to reduce the possibility of selection
+bias in this process (with details stated in Section
+5.2.1). We collect daily inventory levels, daily sales,
+replenishment order placement, and arrival dates
+for all (SKU, DC) pairs in the ﬁeld experiment to cal-
+culate the performance metrics, including the average
+holding cost, average stockout cost, average total cost,
+average turnover rate, and average stockout rate.
+Moreover, JD’s logistics system adopts a less restric-
+tive setting compared with Section 3.2. Instead of fully
+backordered, demand that cannot be ful ﬁlled by cur-
+rent inventory is considered backordered only if it can
+be ful ﬁlled by open purchase orders. (Open purchase
+orders refer to those orders that have been placed but
+haven’t arrived, in other words, replenishment that is
+on the way.) If it cannot be ful ﬁlled by open purchase
+orders, it is considered as lost sales. In addition, there
+Table 1. Details of Categories Involved in the Field Experiments
+Second level categories Tea set Pastry essentials & seasoning
+Third level categories Tea set combination Baking supplies
+Tea cup Flour
+Tea kettle Mixed grains
+Tea tray Rice
+Tea can Oil
+Tea bowl Seasonings
+Tea accessories Dry foods
+Tea-ware decoration Convenience foods
+Coffee set
+Tea travel set
+Figure 3. Propensity Score Matching
+(a) (b)
+Notes. The overlap of the histogram and density plot in (b) demonstrates that the propensity score has been perfectly matched. (a) Propensity
+score before matching. (b) Propensity score after matching.
+Qi et al.: A Practical End-to-End Inventory Management Model with Deep Learning
+Management Science, 2023, vol. 69, no. 2, pp. 759 –773, © 2022 INFORMS 767
+
+=== PAGE 10 ===
+may be crossover of orders; that is, orders may not
+arrive in the same sequence as they are placed. There-
+fore, the ﬁeld experiment can test the performance of
+the proposed E2E algorithm in a real-world setting.
+5.2.1. Propensity Score Matching. As explained ear-
+lier, the treatment group contains 6,097 (SKU, DC)
+pairs selected based on voluntary response, and all
+remaining (SKU, DC) pairs from the categories listed
+in Table 1 are the candidate control group. In order to
+address the issue of potential selection bias, we choose
+(SKU, DC) pairs in the control group using propensity
+score matching (see Rosenbaum and Rubin 1983,
+Rubin and Waterman 2006 for references). For pro-
+pensity score matching, we use demand and VLT as
+cofounder variables. Figure 3 visualizes the propen-
+sity score of the control and treatment sets before and
+after matching. After matching, we have a control
+group with the same size as the treatment group.
+5.3. Results
+In this section, we ﬁrst compare the performance of
+the two algorithms during the test period using a two-
+sample t-test. Then, to further adjust the potential dif-
+ferences in the treatment and control groups, we train
+linear regression models for each outcome metric and
+check the signi ﬁcance of the coef ﬁcients. Moreover,
+we evaluate the performance of both treatment and
+control groups before the test period and apply the
+difference-in-differences approach to further con ﬁrm
+the effect of applying the E2E method.
+5.3.1. T-Test Results. Table 2 demonstrates the results
+of t-tests for the comparison of ﬁve performance met-
+rics: holding cost, stockout cost, total inventory cost,
+turnover rate, and stockout ratio. The E2E algorithm
+signiﬁcantly reduces all ﬁve metrics with four out of
+ﬁve t-test p-values < 0.001 and one p-value < 0.05. In
+particular, the E2E algorithm reduces the average
+holding cost by 26.1% and average stockout cost by
+51.7% compared with JD.com ’s current replenishment
+method. Not surprisingly, the total cost is reduced by
+40.4%. The average turnover rate is also reduced by
+8.8%, whereas the stockout ratio is reduced by 34.6%.
+5.3.2. Linear Regression. Furthermore, one may have
+the concern that the treatment and control groups have
+slightly different average demand and average VLT, and
+the difference might lead to unreliablet-tests. To address
+this concern, we further consider the following linear
+regression model for the outcome of each metric:
+Outcome/equals θ
+0 + θ1 Is-E2E + θ2 Ave-Demand
++ θ3 Ave-VLT, (11)
+where Is-E2E is a binary independent variable that
+represents if a (SKU, DC) pair orders using the E2E
+algorithm, Ave-Demand is an independent variable
+that represents the average demand of the (SKU, DC)
+pair, and similarly, Ave-VLT represents the average
+VLT of the (SKU, DC) pair.
+The linear regression model plays a similar role as
+the t-tests. It aims to provide a better comparison of
+the treatment and control groups ’ average outcome
+by considering covariates that may affect the outcome
+of the metrics. Table 3 demonstrates the coef ﬁcients
+and p-values of Is-E2E.
+Table 3 indicates that using the E2E algorithm leads
+to signi ﬁcant reductions on all ﬁve metrics: holding
+cost, stockout cost, total cost, turnover rate, and stock-
+out ratio.
+5.3.3. Difference-in-Differences Estimation. To further
+study the effect of the E2E algorithm on all ﬁve met-
+rics, we consider a DiD approach. To be more speci ﬁc,
+we evaluate the performance of the treatment and
+control groups from February 29, 2020, to March 29,
+2020. We denote this period as the pre-experiment
+period. Then, we compare the performance with that
+Table 2. Comparison of Performances of Two Algorithms: t-test Results
+Holding cost Stockout cost Total cost Turnover rate Stockout ratio
+Treatment group 598.20 496.34 1094.54 18.59 0.17
+Control group 809.54 1,027.93 1837.47 20.39 0.26
+Difference − 211.34 ( − 26.1%) − 531.59 ( − 51.7%) − 742.93 ( − 40.4%) 1.8 ( − 8.8%) 0.09 ( − 34.6%)
+t-test p-value <0.001**** <0.001**** <0.001**** 0.0102** <0.001****
+*p < 0:1; **p < 0:05; ***p < 0:01; ****p < 0:001.
+Table 3. Comparison of Performances of Two Algorithms: Linear Regression
+Holding cost Stockout cost Total cost Turnover rate Stockout ratio
+Coefﬁcient − 211.33 − 531.53 − 742.86 − 1.16 − 0.09
+t-test p-value <0.001**** <0.001**** <0.001**** 0.007*** <0.001****
+*p < 0:1; **p < 0:05; ***p < 0:01; ****p < 0:001.
+Qi et al.: A Practical End-to-End Inventory Management Model with Deep Learning
+768 Management Science, 2023, vol. 69, no. 2, pp. 759 –773, © 2022 INFORMS
+
+=== PAGE 11 ===
+of the postexperiment test period: March 30, 2020, to
+April 30, 2020. During the pre-experiment period,
+both treatment and control groups adopt JD ’s current
+replenish algorithm, and during the postexperiment
+period, the treatment group adopts the E2E algorithm,
+whereas the control group still follows JD ’s algorithm.
+Table 4 demonstrates the DiD comparison of the
+effect of E2E algorithm implementation. In Table 4,
+the terms “Pre-Exp” and “Post-Exp” denote the pre-
+experiment and postexperiment periods, respectively.
+The results indicate that the implementation of our
+proposed E2E algorithm improves all ﬁve metrics.
+The reader may notice that, in the control group, there
+is a slight increment of the postexperiment metrics
+compared with the pre-experiment metrics. Our con-
+jecture is that, as the economics in China began to
+recover in March 2020, both demand and supply have
+a larger scale in April compared with March.
+6. Conclusions
+In this work, we propose an E2E framework with deep
+learning models for multiperiod replenishment problems
+without prior assumptions on future demands and on the
+VLT. The model is trained to capture the behavior of opti-
+mal solutions from a perfect knowledge of the future. Col-
+laborated with an industrial partner, our proposed E2E
+model has been implemented in production, and we con-
+duct a series of numerical experiments, including aﬁeld
+experiment, to demonstrate the advantage of the proposed
+E2E model over conventional two-step PTO approaches
+and current practices in industry. Our model, as well as
+the E2E philosophy, can be practically useful for the indus-
+try because it shortens the decision process and provides a
+more automatic inventory-management solution. With
+the possibility of scaling and generalization, the proposed
+E2E model enables higher inventory-management accu-
+racy with a lower operational cost and fewer labor efforts.
+Moreover, we suggest several opportunities for
+future research in the E2E concept for supply chain
+management. For instance, one potential direction is
+trying to generalize the E2E model to more general
+inventory management settings, such as multiechelon
+cases and inventory allocation problems. Another
+appealing direction is constructing an E2E solution for
+jointly deciding order quantity and ordering time.
+Acknowledgments
+The authors express their appreciation to the support
+from JD.com, especially to the vice president of JD.com
+and chief manager of the smart supply chain management
+(SSCM) unit, Mr. Chen Lin, and the chief technology man-
+ager of SSCM, Mr. Hao Hu. Moreover, the authors thank
+colleagues in JD.com from the SSCM unit, including Lei
+Chen, Xin Wang, Shuyu Han, Carl Morris, Jingtao Chen,
+Jing Li, Jianshen Zhang, Changfei Zhan, Jing Lu, and
+Hongjie He; colleagues from the fast-moving consumer
+goods team, including Yanhua Wang, Xueli Zhao, You-
+cheng Wang, and Litian Wu; and Jingjing Wang from the
+fashion and lifestyle team. M. Qi and Y. Shi contributed
+equally to the manuscript. Both are joint ﬁrst-author.
+Appendix A. Proof of Theorem 1
+In order to prove Theorem 1, we need the following lemma.
+Lemma A.1. Consider the total inventory cost within time
+period [t1, t2] as f (a)/equals ∑t2
+s/equals t1 h[It1 + a − d[t1 ,s]]+ + b[d[t1 ,s]−
+It1 − a]+, where h is the unit holding cost and b is the unit
+backorder cost. The optimal order quantity that minimizes the
+total cost is derived by arg mina∈R f (a)/equals a∗ /equals d[t1 ,s∗] − It1 , where
+s∗ /equals⌊ b(t2 +1− t1 )
+h+b + t1⌋.
+Proof of Lemma A.1. First, we show that a∗ takes the
+form of d[t1 ,s] − It1 for some s ∈[ t1, t2]. It is evident that
+f(a) is convex and piecewise linear; hence, the optimal
+solution should be one of the extreme point, which is
+d[t1 ,s] − It1 for some s. Now, we need to choose s∗ such
+that s∗ /equals arg mins∈{t1 ,::: ,t2 }{ f (d[t1 ,s] − It1 )}. Note that, for s ∈
+{t1, ::: , t2}, choosing to satisfy one unit of demand that
+occurred at period s generates a holding cost h(s − t1),
+whereas choosing not to satisfy one unit of demand gen-
+erates backorder cost b(t
+2 + 1 − s); we choose to satisfy the
+demand unit that occurs at period s such that h(s − t1)
+≤ b(t2 + 1 − s)/equals b(t2 + 1 − t1)− b(s − t1). This analysis is valid
+for all units that occur in period s; hence, we choose to
+satisfy either all demand units that occur at period s or
+none of them. Hence, we have s ≤ s
+∗ for all s such that
+h(s − t1)≤ b(t2 + 1 − t1)− b(s − t1), which leads to the ﬁnal
+solution s∗ /equals⌊ b(t2 +1− t1 )
+h+b + t1⌋. w
+Table 4. Difference-in-Differences Estimation of E2E Algorithm
+Treatment group Control group Difference-in-Differences Estimation
+Pre-exp Post-exp Change Pre-exp Post-exp Change DiD t-test p-value
+Holding cost 688.13 598.20 − 89.93 786.68 809.54 22.86 − 112.79 <0.001****
+Stockout cost 880.50 496.34 − 384.16 887.64 1,027.93 140.29 − 524.45 <0.001****
+Total cost 1,568.63 1,094.54 − 474.09 1,674.32 1,837.47 163.15 − 637.24 <0.001****
+Turnover rate 16.41 18.59 2.18 16.40 20.39 3.99 − 1.81 0.041**
+Stockout rate 0.24 0.17 − 0.07 0.22 0.26 0.04 − 0.11 0.044**
+*p < 0:1; **p < 0:05; ***p < 0:01; ****p < 0:001.
+Qi et al.: A Practical End-to-End Inventory Management Model with Deep Learning
+Management Science, 2023, vol. 69, no. 2, pp. 759 –773, © 2022 INFORMS 769
+
+=== PAGE 12 ===
+Lemma A.1 leads to our ﬁnal result of Theorem 1 on
+the optimal order quantity under the realization of each
+sample data.
+Proof of Theorem 1. First, we relax the constraint a
+m ≥ 0
+and start from the last decision aM. By Lemma A.1, a∗
+M /equals
+mins∈{vM ,::: ,T}{d[vM ,s] − IvM } and s∗ /equals arg mins′ ∈{vM ,::: ,T}
+∑T
+s/equals vM
+h[dvM ,s′ − d[vM ,s]]+ + b[d[vM ,s] − dvM ,s′ ]+. It should be noted that
+s∗ only depends on the sequence {dt}T
+t/equals vM . Hence, f ∗
+M :/equals
+f (a∗
+M)/equals ∑T
+s/equals vM h[dvM ,s∗ − d[vM ,s]]+ + b[d[vM ,s] − dvM ,s∗ ]+ does not
+depend on IvM ; hence, the decision of a∗
+M is independent of
+the decision of a∗
+M− 1. By recursion, we can decompose the
+decisions {a∗
+m}M
+m/equals 1 with corresponding period [vm, vm+1).
+Now, we consider the constraint am ≥ 0. It is not dif ﬁ-
+cult to verify that, with constraint am ≥ 0, we can still com-
+pute a∗
+m using a∗
+m /equals arg minam ≥ 0
+∑vm+1 − 1
+s/equals vm h[Ivm + am − d[vm ,s]]+
++ b[d[vm ,s] − Ivm − am]+ in the sequence of a1, a2, ::: , aM.W e
+let a∗∗
+m denote the optimal solution with constraint am ≥ 0.
+Note that, under this constraint, f ∗
+m+1 depends on Ivm+1 .I n
+fact, it is a nondecreasing function of Ivm+1 and, hence, a
+nondecreasing function of am. Suppose for m, following
+the preceding method, we have a∗
+m < 0; then, a∗∗
+m /equals 0 is not
+only the minimizer of fm(am), but also a minimizer of
+f ∗
+m+1. w
+Appendix B. Sensitivity Analysis
+In this part, we conduct various sensitivity analysis to
+demonstrate the robustness and generalization ability of
+proposed E2E model under different hyper-parameter
+choices, data size and model covariates.
+B.1. Sensitivity Analysis for Network Hyperparameters
+We ﬁrst provide details of the neural network structure
+and hyperparameters used in the E2E model. In the train-
+ing stage, we sweep through different combinations of
+hyperparameters within the considered range and use the
+validation set to choose the best hyperparameter values,
+which is shown as the “default value ” column.
+In addition, in order to investigate the sensitivity of the
+E2E model performance stated in Section 4 with respect to
+the network structure and hyperparameters, we provide
+three sets of sensitivity tests with respect to the following
+hyperparameters:
+• Number of hidden layers.
+• Number of neurons/weights.
+• Learning rate.
+B.1.1. Number of Hidden Layers. To check the sensitiv-
+ity of the E2E model with respect to the number of hid-
+den layers, we adjust the number of hidden layers in the
+integration module. Table B.1 demonstrates the sensitivity
+analysis regarding different network hyperparameters. By
+default, there are two hidden layers, Layer_3 and Layer_4,
+both of size 100. We tried three other variants: (1) keeping
+only one hidden layer, that is, Layer_3 of size 100; (2) hav-
+ing three hidden layers, that is, Layer_3, Layer_4, and
+Layer_5, each of size 100; (3) having four hidden layers,
+that is, Layer_3, Layer_4, Layer_5, and Layer_6, each of
+size 100. We trained four different E2E models with the
+four different network structures and tested their perform-
+ance using the same data set and experimental setup as in
+Section 4.1.
+Table B.2 shows the total inventory management, hold-
+ing, and stockout costs of the four E2E models with differ-
+ent numbers of hidden layers. When the hidden layer
+number is one, the end-to-end model performance is infe-
+rior to other benchmark models (in Figure 2) because of
+the lack of representation capacity. In all other cases, the
+end-to-end models outperform the benchmarks. As the
+number of hidden layers increases, the cost of the end-to-
+end model ﬁrst decreases, then increases. By having more
+layers, the network representation power increases and
+can better ﬁt the relationship between observation and the
+optimal order decision. However, an overcomplicated net-
+work may cause over ﬁtting in the training set and shows
+less generalization capacity in the test set.
+B.1.2. Number of Neurons/Weights. To investigate the
+model sensitivity with respect to (w.r.t.) the number of
+neurons, we sweep through [30, 40, 50, 60] as the hidden
+state size of the demand prediction model (MQRNN) and
+compare the performance of the different networks.
+Table B.3 reports the total, holding, and stockout costs
+of the four E2E models with different numbers of neurons.
+As expected, as the number of hidden neurons increases,
+the E2E model cost ﬁrst decreases, then increases. Similar
+to the effect of adding more layers, by adding more neu-
+rons, the representation capacity of the neural network is
+enhanced. However, too many neurons may lead to over-
+ﬁtting in the training set, and the trained network shows
+worse generalization performance.
+B.1.3. Learning Rate. Learning rate is one of the most
+important hyperparameters in neural network training
+(LeCun et al. 2015). Table B.4 shows how a different learn-
+ing rate value affects the performance of the E2E model
+on the test set. If we further increase the learning rate to
+0.1 or larger, the network training process becomes unsta-
+ble, and the training loss oscillates, which leads to much
+worse performance. When the learning rate is 0.0001, the
+learned model is slightly better than our default setting ( lr
+/equals 0.001), but the training time increases signi ﬁcantly.
+B.2. Sensitivity Analysis for Data Size
+In order to investigate the sensitivity w.r.t. training data
+size, we use [20%, 40%, 60%, 80%, 100%] of the training
+data to train the end-to-end model. The cost and computa-
+tional time of the E2E model with different amounts of
+training data are provided in Table B.5 and Figure B.1.
+B.3. Sensitivity Analysis for b and h
+All the previous simulations are based on the assumption
+that the ratio between unit stockout cost and unit holding
+cost is nine, which may not re ﬂect the case in the real
+world. Therefore, a sensitivity analysis with respect to dif-
+ferent values of b/h is conducted to validate our conclusion
+in previous parts. It should be noted that different b/h
+ratios not only lead to different measurement costs, but
+also change replenishment decisions for all models.
+Qi et al.: A Practical End-to-End Inventory Management Model with Deep Learning
+770 Management Science, 2023, vol. 69, no. 2, pp. 759 –773, © 2022 INFORMS
+
+=== PAGE 13 ===
+Figure B.2 demonstrates total, holding, and stockout costs
+of the E2E model, OPT decision, and two base stock algo-
+rithms under different b/h ratios. According to these results,
+the E2E model is stable and closest to the optimal solutions
+in most cases with respect to different choices of b/h.
+B.4. Sensitivity for Different Neural Network
+Local Minima
+Because the loss functions of neural networks are highly
+nonconvex and contain many local minima, when training
+neural networks using stochastic gradient descent (SGD)
+methods (the classic way of training neural networks), we
+are very likely to get stuck in one of the local minima.
+However, several recent studies experimenting with larger
+networks and SGD suggest that, whereas deep neural net-
+works do have many local minima, they consistently give
+very similar performance (Choromanska et al. 2015,K a w a -
+guchi 2016). Consistent with these results from the machine
+learning literature, we ﬁnd the performance of our pro-
+posed E2E deep learning model has a similar property in
+Table B.3. Sensitivity of E2E Model w.r.t. to the Number of Neurons
+OPT E2E (30) E2E (40) E2E (50) E2E (60)
+Total cost 3,022.60 3,846.28 ( +27.3%) 3,783.32 ( +25.2%) 3,766.52 ( +24.6%) 3,860.99 ( +27.7%)
+Holding cost 1,925.70 2,886.45 2,710.71 2,689.02 2,185.18
+Stockout cost 1,096.91 959.83 1,072.61 1,077.50 1,675.81
+Table B.2. Sensitivity of E2E Model w.r.t. to the Number of Hidden Layers
+OPT E2E (one layer) E2E (two layers) E2E (three layers) E2E (four layers)
+Total cost 3,022.60 4,857.20 ( +60.1%) 3,766.52 ( +24.6%) 3,822.69 ( +26.5%) 3,904.74 ( +29.2%)
+Holding cost 1,925.70 3,919.17 2,689.02 2,453.32 2,231.01
+Stockout cost 1,096.91 938.03 1,077.50 1,369.38 1,673.73
+Table B.4. Sensitivity w.r.t. to Learning Rate
+OPT E2E (lr /equals 0.0001) E2E (lr /equals 0.001) E2E (lr /equals 0.01)
+Total cost 3,022.60 3,744.28 ( +23.9%) 3,766.52 ( +24.6%) 4,231.01 ( +39.9%)
+Holding cost 1,925.70 2,424.71 2,689.02 2,350.98
+Stockout cost 1,096.91 1,319.58 1,077.50 1,880.03
+Table B.5. E2E Model Sensitivity w.r.t. to Training Data Size
+Percentage Number of training data OPT cost E2E cost E2E Training time (s)
+20 3,893 SKUs 3,022.60 5,608.01 ( +85.5%) 281.61
+40 7,786 SKUs 3,022.60 4,765.52 ( +57.7%) 624.64
+60 11,680 SKUs 3,022.60 4,226.84 ( +39.8%) 1,022.57
+80 15,573 SKUs 3,022.60 3,783.54 ( +25.2%) 1,459.42
+100 19,466 SKUs 3,022.60 3,766.52 ( +24.6%) 1,830.36
+Table B.1. Network Hyperparameters
+Hyperparameter Default value Range
+DF_submodule: MQRNN Hidden state size 50 {30, 40, 50, 60}
+VLT_submodule Layer size {50, 20} {100, 20}, {50, 20}, {30, 20}
+(VLT_layer_1, VLT_layer_2 )
+Integration module Layer size {100, 100} {100}, {100, 100}, {100, 100, 100}, {100, 100, 100, 100}
+(Layer_3, Layer_4 )
+Learning rate 0.001 {0.0001, 0.001, 0.01}
+Learning rate decay 1 e − 4 {1e-5, 1e-4, 1e-3}
+Momentum 0.85 {0.8, 0.85, 0.9}
+Mini-batch size 64 {64, 128, 256}
+Weight initialization Gaussian µ /equals 0, σ /equals 0:01 {Gaussian, Uniform}
+Activation Recti ﬁed linear unit (ReLU) {ReLU, tanh}
+Dropout rate 0.2 {0.1, 0.2, 0.3, 0.4}
+Qi et al.: A Practical End-to-End Inventory Management Model with Deep Learning
+Management Science, 2023, vol. 69, no. 2, pp. 759 –773, © 2022 INFORMS 771
+
+=== PAGE 14 ===
+numerical experiments. For instance, two different E2E
+models with the default network structure and hyper-
+parameter are trained with different weight initialization
+(random seeds). Figure B.3 visualizes the ﬁnal weights of
+VLT_layer_1 of the two trained networks. And Table B.6
+provides the performances of two networks on the test
+data set. It can be observed that, although the two network
+weights are quite different, they have similar performances
+on the test set in terms of total, holding, and stockout
+costs.
+Figure B.2. (Color online) Performance of Each Model with Different Ratios onb/h
+Figure B.1. E2E Model Sensitivity w.r.t. to Training Data Size
+Figure B.3. (Color online) Network Sensitivity w.r.t. Local Minima
+Note. The two plots show the weights of VLT_layer1 of two neural networks trained with different initialization.
+Qi et al.: A Practical End-to-End Inventory Management Model with Deep Learning
+772 Management Science, 2023, vol. 69, no. 2, pp. 759 –773, © 2022 INFORMS
+
+=== PAGE 15 ===
+Endnote
+1 Predicting the total demand for Benchmark 1 and predicting the
+daily demand for Benchmark 2.
+References
+Ambrogioni L, G ¨uc¸l ¨u U, van Gerven MA, Maris E (2017) The kernel
+mixture network: A nonparametric method for conditional den-
+sity estimation of continuous random variables. Preprint, sub-
+mitted May 19, https://arxiv.org/abs/1705.07111.
+Ban GY, Rudin C (2018) The big data newsvendor: Practical insights
+from machine learning. Oper. Res. 67(1):90–108.
+Bengio Y (1997) Using a ﬁnancial training criterion rather than a
+prediction criterion.I n t e r n a t .J .N e u r a lS y s t e m s8(4):433–443.
+Bertsimas D, Kallus N (2020) From predictive to prescriptive ana-
+lytics. Management Sci. 66(3):1025–1044.
+B¨ose JH, Flunkert V, Gasthaus J, Januschowski T, Lange D, Salinas
+D, Schelter S, Seeger M, Wang Y (2017) Probabilistic demand
+forecasting at scale. Proc. VLDB Endowment 10(12):1694–1705.
+Choromanska A, Henaff M, Mathieu M, Arous GB, LeCun Y (2015)
+The loss surfaces of multilayer networks. Proc. 18th Internat.
+Conf. Artiﬁcial Intelligence Statist.,1 9 2–204.
+Chu LY, Shanthikumar JG, Shen ZJM (2008) Solving operational sta-
+tistics via a Bayesian analysis. Oper. Res. Lett. 36(1):110–116.
+Donti P, Amos B, Kolter JZ (2017) Task-based end-to-end model
+learning in stochastic optimization. Guyon I, von Luxburg U,
+Bengio S, Wallach HM, Fergus R, Vishwanathan SVN, Garnett
+R, eds. Adv. Neural Inform. Processing Systems ,v o l .3 0( C u r r a n
+Associates, Red Hook, NY), 5484–5494.
+Ehrhardt R (1984) (s, s) policies for a dynamic inventory model with
+stochastic lead times. Oper. Res. 32(1):121–132.
+Elmachtoub AN, Grigas P (2022) Smart “predict, then optimize. ”
+Management Sci. 68(1):9–26.
+Fan C, Zhang Y, Pan Y, Li X, Zhang C, Yuan R, Wu D, Wang W,
+Pei J, Huang H (2019) Multi-horizon time series forecasting with
+temporal attention learning. Proc. 25th ACM SIGKDD Internat.
+Conf. Knowledge Discovery Data Mining(ACM), 2527–2535.
+Friedman J, Hastie T, Tibshirani R (2001) The Elements of Statistical
+Learning, vol. 1 (Springer, New York).
+Gallego G, ¨Ozer ¨O (2001) Integrating replenishment decisions with
+advance demand information.Management Sci.47(10):1344–1360.
+Ignall E, Veinott AF Jr (1969) Optimality of myopic inventory
+policies for several substitute products. Management Sci. 15(5):
+284–304.
+Iida T, Zipkin PH (2006) Approximate solutions of a dynamic
+forecast-inventory model. Manufacturing Service Oper. Manage-
+ment 8(4):407–425.
+James G, Witten D, Hastie T, Tibshirani R (2013) An Introduction to
+Statistical Learning, vol. 112 (Springer, New York), 18.
+Kaplan RS (1970) A dynamic inventory model with stochastic lead
+times. Management Sci. 16(7):491–507.
+Kawaguchi K (2016) Deep learning without poor local minima. Lee
+DD, Sugiyama M, Luxburg UV, Guyon I, Garnett R, eds.
+Advances in Neural Information Processing Systems ,v o l .2 9( C u r -
+ran Associates, Inc.), 586–594.
+Ke G, Meng Q, Finley T, Wang T, Chen W, Ma W, Ye Q, Liu TY
+(2017) LightGBM: A highly ef ﬁcient gradient boosting decision
+tree. Guyon I, Luxburg UV, Bengio S, Wallach H, Fergus R,
+Vishwanathan S, Garnett R, eds. Proc. 31st Conf. Neural Inform.
+Processing Systems (NIPS), Long Beach, CA (Curran Associates
+Inc., Red Hook, NY), 3149–3157.
+Koenker R, Chesher A, Jackson M (2005) Quantile Regression. Econo-
+metric Society Monographs (Cambridge University Press, New
+York).
+LeCun Y, Bengio Y, Hinton G (2015) Deep learning. Nature
+521(7553):436–444.
+Levi R, P ´al M, Roundy RO, Shmoys DB (2007) Approximation algo-
+rithms for stochastic inventory control models. Math. Oper. Res.
+32(2):284–302.
+Levine S, Finn C, Darrell T, Abbeel P (2016) End-to-end training of
+deep visuomotor policies. J. Machine Learn. Res. 17(1):1334–1373.
+Liyanage LH, Shanthikumar JG (2005) A practical inventory control
+policy using operational statistics. Oper. Res. Lett. 33(4):341–348.
+Muharremoglu A, Tsitsiklis JN (2008) A single-unit decomposi-
+tion approach to multiechelon inventory systems. Oper. Res.
+56(5):1089–1103.
+Oroojlooyjadid A, Snyder LV, Tak ´aˇc M (2020) Applying deep learn-
+ing to the newsvendor problem. IISE Trans. 52(4):444–463.
+Paszke A, Gross S, Chintala S, Chanan G, Yang E, DeVito Z, Lin Z,
+et al. (2017) Automatic differentiation in PyTorch. 31st Conf.
+Neural Inform. Processing Systems (NIPS).
+Rosenbaum PR, Rubin DB (1983) The central role of the propensity score
+in observational studies for causal effects.Biometrika70(1):41–55.
+Rubin DB, Waterman RP (2006) Estimating the causal effects of mar-
+keting interventions using propensity score methodology. Sta-
+tist. Sci. 21(2):206–222.
+Sheather SJ, Jones MC (1991) A reliable data-based bandwidth selec-
+tion method for kernel density estimation. J. Roy. Statist. Soc. B
+53(3):683–690.
+Snyder L, Shen Z (2011) Fundamentals of Supply Chain Theory (Wiley,
+New York).
+Srivastava N, Hinton G, Krizhevsky A, Sutskever I, Salakhutdinov
+R (2014) Dropout: A simple way to prevent neural networks
+from overﬁtting. J. Machine Learn. Res. 15(1):1929–1958.
+Toktay LB, Wein LM (2001) Analysis of a forecasting-production-
+inventory system with stationary demand. Management Sci.
+47(9):1268–1281.
+Veinott AF Jr (1965) Optimal policy for a multi-product, dynamic,
+nonstationary inventory problem.Management Sci.12(3):206–222.
+Wang T, Atasu A, Kurtulus¸ M (2012) A multiordering newsvendor
+model with dynamic forecast evolution. Manufacturing Service
+Oper. Management 14(3):472–484.
+Wang K, Babenko B, Belongie S (2011) End-to-end scene text recogni-
+tion. 2011 IEEE Internat. Conf. Comput. Vision(IEEE), 1457–1464.
+Wen R, Torkkola K, Narayanaswamy B (2017) A multi-horizon
+quantile recurrent forecaster. Preprint, submitted November 29,
+https://arxiv.org/abs/1711.11053.
+Zhu K, Thonemann UW (2004) An adaptive forecasting algorithm
+and inventory policy for products with short life cycles. Naval
+Res. Logist. 51(5):633–653.
+Zipkin P (2000) Foundations of Inventory Management (McGraw-Hill,
+New York).
+Table B.6. Comparison of Two E2E Model Performance
+with Different Initialization Seeds
+OPT E2E (network 1) E2E (network 2)
+Total cost 3,022.60 3,766.52 ( +24.6%) 3,800.54 ( +25.7%)
+Holding cost 1,925.70 2,689.02 ( +39.6%) 2,766.67 ( +43.7%)
+Stockout cost 1,096.91 1,077.50 ( − 1.8%) 1,033.87 ( − 5.7%)
+Qi et al.: A Practical End-to-End Inventory Management Model with Deep Learning
+Management Science, 2023, vol. 69, no. 2, pp. 759 –773, © 2022 INFORMS 773
+
+=== PAGE 16 ===
+Copyright
+2023,
+by
+INFORMS,
+all
+rights
+reserved.
+Copyright
+of
+Management
+Science
+is
+the
+property
+of
+INFORMS:
+Institute
+for
+Operations
+Research
+and
+its
+content
+may
+not
+be
+copied
+or
+emailed
+to
+multiple
+sites
+or
+posted
+to
+a
+listserv
+without
+the
+copyright
+holder's
+express
+written
+permission.
+However,
+users
+may
+print,
+download,
+or
+email
+articles
+for
+individual
+use.

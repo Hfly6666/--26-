@@ -1,0 +1,17 @@
+{
+  "date": "2026-10-25",
+  "zip_crc_passed": true,
+  "zip_member_count": 72,
+  "files": [
+    {
+      "name": "T1_论文复现报告.html",
+      "bytes": 691629,
+      "sha256": "537bd0854142aeaddd6b638efed56f3bab6cb33fab956fd469b18c829183d891"
+    },
+    {
+      "name": "T1_复现代码与数据.zip",
+      "bytes": 7371665,
+      "sha256": "db7197969b867c34f8ed6fda22c9febb1cd9632f627e53619f6ec2d0c881e23c"
+    }
+  ]
+}

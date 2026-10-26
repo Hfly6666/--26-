@@ -1,0 +1,7 @@
+{
+  "author_normal_mean": 3961.6915995397007,
+  "paper_eq7_normal_mean": 3925.8668968162638,
+  "author_z": 1.64,
+  "paper_90th_quantile": 1.2815515655446004,
+  "source_issue": "notebook uses demand_std**2*vendor_vlt_std instead of demand_mean**2*vendor_vlt_std**2; equation-based branch floors the resulting stock target; same sequential evaluator retained"
+}

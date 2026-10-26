@@ -1,0 +1,30 @@
+{
+  "e2e_pre": {
+    "holding": 666.394,
+    "stockout": 815.868,
+    "total": 1482.262,
+    "turnover": 15.48785681562142,
+    "stockout_rate": 0.23613333333333333
+  },
+  "e2e_post": {
+    "holding": 497.99,
+    "stockout": 386.1,
+    "total": 884.09,
+    "turnover": 12.268704620140678,
+    "stockout_rate": 0.10827010628260629
+  },
+  "jd_pre": {
+    "holding": 506.46,
+    "stockout": 473.13,
+    "total": 979.59,
+    "turnover": 15.152613035690036,
+    "stockout_rate": 0.19752527930902117
+  },
+  "jd_post": {
+    "holding": 841.428,
+    "stockout": 1143.72,
+    "total": 1985.148,
+    "turnover": 18.471056191690177,
+    "stockout_rate": 0.23652916666666665
+  }
+}

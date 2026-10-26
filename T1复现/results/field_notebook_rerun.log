@@ -1,0 +1,40 @@
+Algorithm A Average Holding cost:  497.99
+Algorithm A Average Stockout cost:  386.1
+Algorithm A Average Total cost:  884.09
+Algorithm A Average Turnover rate:  12.268704620140678
+Algorithm A Average Stockout rate:  0.10827010628260629
+Algorithm B Average Holding cost:  841.428
+Algorithm B Average Holding Stockout cost:  1143.72
+Algorithm B Average Total cost:  1985.148
+Algorithm B Average Turnover rate:  18.471056191690177
+Algorithm B Average Stockout rate:  0.23652916666666665
+t =  -7.574921935071391
+p =  8.17663695645046e-14
+t =  -7.7656462889444
+p =  2.0079594211986923e-14
+t =  -11.914765084142427
+p =  1.0703809200100754e-30
+t =  -5.477551569211563
+p =  5.458741769919188e-08
+t =  -8.427020034813369
+p =  1.2259502974682827e-16
+Algorithm A Average Holding cost:  666.394
+Algorithm A Average Stockout cost:  815.868
+Algorithm A Average Total cost:  1482.262
+Algorithm A Average Turnover rate:  15.48785681562142
+Algorithm A Average Stockout rate:  0.23613333333333333
+Algorithm B Average Holding cost:  506.46
+Algorithm B Average Holding Stockout cost:  473.13
+Algorithm B Average Total cost:  979.59
+Algorithm B Average Turnover rate:  15.152613035690036
+Algorithm B Average Stockout rate:  0.19752527930902117
+t =  -8.476734092687739
+p =  8.238807145058064e-17
+t =  -9.391906897402894
+p =  3.874877819304967e-20
+t =  -14.150477986800093
+p =  1.452524864442217e-41
+t =  -2.837084381274654
+p =  0.004644914698364636
+t =  -7.692592936165375
+p =  3.450407517799295e-14
